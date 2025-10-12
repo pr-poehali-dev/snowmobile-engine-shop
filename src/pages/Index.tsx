@@ -18,51 +18,94 @@ const Index = () => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [activeSection, setActiveSection] = useState('home');
 
-  const product = {
-    id: 'lifan-2v78f-2a',
-    name: 'Lifan 2V78F-2A PRO',
-    price: 89900,
-    power: '27 л.с.',
-    volume: '688 см³',
-    image: 'https://cdn.poehali.dev/files/4c1f2bc5-fd6e-4a17-9031-1deacf7cdb07.png',
-    specs: {
-      basic: [
-        { label: 'Тип двигателя', value: '4-тактный, двухцилиндровый, бензиновый' },
-        { label: 'Мощность', value: '27 л.с. (21 кВт при 3600 об/мин)' },
-        { label: 'Крутящий момент', value: '50 Н·м при 2500 об/мин' },
-        { label: 'Рабочий объём', value: '688 см³' },
-        { label: 'Диаметр цилиндра', value: '78 мм' },
-        { label: 'Ход поршня', value: '72 мм' },
-        { label: 'Степень сжатия', value: '8.0:1' },
-        { label: 'Система охлаждения', value: 'Воздушная' },
-      ],
-      electrical: [
-        { label: 'Система запуска', value: 'Ручной + электростартер' },
-        { label: 'Катушка освещения', value: '20 А / 240 Вт' },
-        { label: 'Система зажигания', value: 'Бесконтактное электронное' },
-        { label: 'Электропитание', value: 'Аккумулятор 12 В' },
-      ],
-      physical: [
-        { label: 'Вес', value: '60 кг' },
-        { label: 'Страна производства', value: 'Китай/Россия' },
-        { label: 'Гарантия', value: '14 дней на проверку' },
+  const products = [
+    {
+      id: 'lifan-2v78f-2a',
+      name: 'Lifan 2V78F-2A PRO',
+      price: 89900,
+      power: '27 л.с.',
+      volume: '688 см³',
+      image: 'https://cdn.poehali.dev/files/4c1f2bc5-fd6e-4a17-9031-1deacf7cdb07.png',
+      specs: {
+        basic: [
+          { label: 'Тип двигателя', value: '4-тактный, двухцилиндровый, бензиновый' },
+          { label: 'Мощность', value: '27 л.с. (21 кВт при 3600 об/мин)' },
+          { label: 'Крутящий момент', value: '50 Н·м при 2500 об/мин' },
+          { label: 'Рабочий объём', value: '688 см³' },
+          { label: 'Диаметр цилиндра', value: '78 мм' },
+          { label: 'Ход поршня', value: '72 мм' },
+          { label: 'Степень сжатия', value: '8.0:1' },
+          { label: 'Система охлаждения', value: 'Воздушная' },
+        ],
+        electrical: [
+          { label: 'Система запуска', value: 'Ручной + электростартер' },
+          { label: 'Катушка освещения', value: '20 А / 240 Вт' },
+          { label: 'Система зажигания', value: 'Бесконтактное электронное' },
+          { label: 'Электропитание', value: 'Аккумулятор 12 В' },
+        ],
+        physical: [
+          { label: 'Вес', value: '60 кг' },
+          { label: 'Страна производства', value: 'Китай/Россия' },
+          { label: 'Гарантия', value: '14 дней на проверку' },
+        ],
+      },
+      compatibility: ['Буран', 'Тайга', 'Рысь', 'Самодельные снегоходы'],
+      complectation: [
+        'Двигатель с электростартером',
+        'Колена выхлопа для снегохода "Буран"',
+        'Вариатор "Сафари"',
+        'Крепёжный болт для вариатора',
       ],
     },
-    compatibility: ['Буран', 'Тайга', 'Рысь', 'Самодельные снегоходы'],
-    complectation: [
-      'Двигатель с электростартером',
-      'Колена выхлопа для снегохода "Буран"',
-      'Вариатор "Сафари"',
-      'Крепёжный болт для вариатора',
-    ],
-  };
+    {
+      id: 'lifan-2v80f-a',
+      name: 'Lifan 2V80F-A',
+      price: 76990,
+      power: '29 л.с.',
+      volume: '764 см³',
+      image: 'https://cdn.poehali.dev/files/35584b42-c3c3-498e-b470-bc3a63a94a8c.png',
+      specs: {
+        basic: [
+          { label: 'Тип двигателя', value: 'Двухцилиндровый с горизонтальным валом' },
+          { label: 'Мощность', value: '29 л.с.' },
+          { label: 'Диаметр вала', value: '25 мм' },
+          { label: 'Топливная система', value: 'Двухкамерный карбюратор с распределенным впрыском' },
+          { label: 'Катушка зажигания', value: '20 А' },
+          { label: 'OEM-номер', value: 'mm40156' },
+        ],
+        electrical: [
+          { label: 'Система запуска', value: 'Электростартер и ручной стартер' },
+          { label: 'Катушка зажигания', value: 'Усовершенствованная 20А' },
+          { label: 'Изоляция', value: 'Силиконовые высоковольтные провода' },
+          { label: 'Электропитание', value: 'Подключаемый аккумулятор' },
+        ],
+        physical: [
+          { label: 'Вес', value: '60 кг' },
+          { label: 'Материал', value: 'Металл, Пластик' },
+          { label: 'Цвет', value: 'Черный' },
+          { label: 'Страна производства', value: 'Россия, Китай' },
+          { label: 'Гарантия', value: '14 дней на проверку' },
+        ],
+      },
+      compatibility: ['Буран', 'Тайга', 'Рысь', 'Самодельные снегоходы', 'Снегоболотоходы'],
+      complectation: [
+        'Базовый двигатель с электростартером',
+        'Колени для выхлопа на снегоход Буран',
+        'Вариатор Сафари',
+        'Болт для крепления вариатора',
+      ],
+    },
+  ];
 
-  const addToCart = () => {
-    const existingItem = cartItems.find(item => item.id === product.id);
+  const addToCart = (productId: string) => {
+    const product = products.find(p => p.id === productId);
+    if (!product) return;
+
+    const existingItem = cartItems.find(item => item.id === productId);
     
     if (existingItem) {
       setCartItems(cartItems.map(item =>
-        item.id === product.id
+        item.id === productId
           ? { ...item, quantity: item.quantity + 1 }
           : item
       ));
@@ -121,7 +164,15 @@ const Index = () => {
             <p className="text-xl text-muted-foreground">Профессиональное оборудование для мототехники</p>
           </div>
 
-          <ProductCard product={product} addToCart={addToCart} />
+          <div className="space-y-12">
+            {products.map(product => (
+              <ProductCard 
+                key={product.id} 
+                product={product} 
+                addToCart={() => addToCart(product.id)} 
+              />
+            ))}
+          </div>
         </div>
       </section>
 
