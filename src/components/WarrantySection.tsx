@@ -2,7 +2,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Separator } from '@/components/ui/separator';
 import Icon from '@/components/ui/icon';
 
-const WarrantySection = () => {
+interface WarrantySectionProps {
+  openAI: () => void;
+}
+
+const WarrantySection = ({ openAI }: WarrantySectionProps) => {
   return (
     <section id="warranty" className="py-12 md:py-20">
       <div className="container px-4">
@@ -90,14 +94,17 @@ const WarrantySection = () => {
                 </div>
               </div>
               <Separator />
-              <div className="flex items-start gap-4">
+              <button 
+                onClick={openAI}
+                className="flex items-start gap-4 w-full text-left hover:bg-muted/50 p-2 -m-2 rounded-lg transition-colors"
+              >
                 <Icon name="MessageCircle" className="text-primary mt-1" size={20} />
                 <div>
                   <div className="font-medium">Онлайн-консультант</div>
                   <div className="text-muted-foreground">Чат на сайте</div>
                   <div className="text-sm text-muted-foreground">Ответим моментально в рабочее время</div>
                 </div>
-              </div>
+              </button>
             </CardContent>
           </Card>
         </div>

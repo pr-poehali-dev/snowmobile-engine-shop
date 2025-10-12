@@ -1,9 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import Icon from '@/components/ui/icon';
 
-const AIAssistant = () => {
-  const [isOpen, setIsOpen] = useState(false);
+interface AIAssistantProps {
+  isOpen: boolean;
+  setIsOpen: (open: boolean) => void;
+}
+
+const AIAssistant = ({ isOpen, setIsOpen }: AIAssistantProps) => {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {

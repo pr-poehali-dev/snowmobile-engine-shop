@@ -18,6 +18,7 @@ interface CartItem {
 const Index = () => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [activeSection, setActiveSection] = useState('home');
+  const [isAIOpen, setIsAIOpen] = useState(false);
 
   const products = [
     {
@@ -344,11 +345,11 @@ const Index = () => {
 
       <DeliverySection />
 
-      <WarrantySection />
+      <WarrantySection openAI={() => setIsAIOpen(true)} />
 
       <Footer />
 
-      <AIAssistant />
+      <AIAssistant isOpen={isAIOpen} setIsOpen={setIsAIOpen} />
     </div>
   );
 };
