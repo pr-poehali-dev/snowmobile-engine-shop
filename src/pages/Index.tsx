@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import Header from '@/components/Header';
 import HeroSection from '@/components/HeroSection';
 import ProductCard from '@/components/ProductCard';
+import ProductFilters from '@/components/ProductFilters';
 import DeliverySection from '@/components/DeliverySection';
 import WarrantySection from '@/components/WarrantySection';
 import Footer from '@/components/Footer';
@@ -17,6 +18,8 @@ interface CartItem {
 const Index = () => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [activeSection, setActiveSection] = useState('home');
+  const [priceRange, setPriceRange] = useState<[number, number]>([70000, 95000]);
+  const [powerRange, setPowerRange] = useState<[number, number]>([25, 30]);
 
   const products = [
     {
@@ -143,6 +146,28 @@ const Index = () => {
     element?.scrollIntoView({ behavior: 'smooth' });
   };
 
+  const filteredProducts = useMemo(() => {
+    return products.filter(product => {
+      const productPower = parseInt(product.power);
+      return (
+        product.price >= priceRange[0] &&
+        product.price <= priceRange[1] &&
+        productPower >= powerRange[0] &&
+        productPower <= powerRange[1]
+      );
+    });
+  }, [priceRange, powerRange, products]);
+
+  const minPrice = Math.min(...products.map(p => p.price));
+  const maxPrice = Math.max(...products.map(p => p.price));
+  const minPower = Math.min(...products.map(p => parseInt(p.power)));
+  const maxPower = Math.max(...products.map(p => parseInt(p.power)));
+
+  const resetFilters = () => {
+    setPriceRange([minPrice, maxPrice]);
+    setPowerRange([minPower, maxPower]);
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <Header
@@ -164,14 +189,37 @@ const Index = () => {
             <p className="text-xl text-muted-foreground">Профессиональное оборудование для мототехники</p>
           </div>
 
-          <div className="space-y-12">
-            {products.map(product => (
-              <ProductCard 
-                key={product.id} 
-                product={product} 
-                addToCart={() => addToCart(product.id)} 
-              />
-            ))}
+          <div className="grid lg:grid-cols-[320px_1fr] gap-8">
+            <ProductFilters
+              priceRange={priceRange}
+              powerRange={powerRange}
+              onPriceChange={setPriceRange}
+              onPowerChange={setPowerRange}
+              onReset={resetFilters}
+              minPrice={minPrice}
+              maxPrice={maxPrice}
+              minPower={minPower}
+              maxPower={maxPower}
+              resultsCount={filteredProducts.length}
+            />
+
+            <div className="space-y-12">
+              {filteredProducts.length > 0 ? (
+                filteredProducts.map(product => (
+                  <ProductCard 
+                    key={product.id} 
+                    product={product} 
+                    addToCart={() => addToCart(product.id)} 
+                  />
+                ))
+              ) : (
+                <div className="text-center py-12">
+                  <p className="text-xl text-muted-foreground">
+                    Товары не найдены. Попробуйте изменить параметры фильтра.
+                  </p>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </section>
