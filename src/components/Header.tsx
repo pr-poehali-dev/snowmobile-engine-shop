@@ -6,6 +6,8 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import Icon from '@/components/ui/icon';
 
 interface CartItem {
@@ -42,6 +44,29 @@ const Header = ({
   const [city, setCity] = useState('');
   const [fullName, setFullName] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [openCityPopover, setOpenCityPopover] = useState(false);
+
+  const russianCities = [
+    'Москва', 'Санкт-Петербург', 'Новосибирск', 'Екатеринбург', 'Казань',
+    'Нижний Новгород', 'Челябинск', 'Самара', 'Омск', 'Ростов-на-Дону',
+    'Уфа', 'Красноярск', 'Воронеж', 'Пермь', 'Волгоград',
+    'Краснодар', 'Саратов', 'Тюмень', 'Тольятти', 'Ижевск',
+    'Барнаул', 'Ульяновск', 'Иркутск', 'Хабаровск', 'Ярославль',
+    'Владивосток', 'Махачкала', 'Томск', 'Оренбург', 'Кемерово',
+    'Новокузнецк', 'Рязань', 'Астрахань', 'Набережные Челны', 'Пенза',
+    'Липецк', 'Тула', 'Киров', 'Чебоксары', 'Калининград',
+    'Брянск', 'Курск', 'Иваново', 'Магнитогорск', 'Тверь',
+    'Ставрополь', 'Нижний Тагил', 'Белгород', 'Архангельск', 'Владимир',
+    'Сочи', 'Курган', 'Смоленск', 'Калуга', 'Чита',
+    'Орёл', 'Волжский', 'Череповец', 'Владикавказ', 'Мурманск',
+    'Сургут', 'Вологда', 'Саранск', 'Тамбов', 'Стерлитамак',
+    'Грозный', 'Якутск', 'Кострома', 'Комсомольск-на-Амуре', 'Петрозаводск',
+    'Нижневартовск', 'Новороссийск', 'Йошкар-Ола', 'Химки', 'Таганрог'
+  ];
+
+  const filteredCities = city
+    ? russianCities.filter(c => c.toLowerCase().includes(city.toLowerCase()))
+    : russianCities;
 
   const isFormValid = phone.trim().length > 0 && city.trim().length > 0;
 
@@ -286,14 +311,50 @@ const Header = ({
                           <Label htmlFor="city">
                             Город получения <span className="text-destructive">*</span>
                           </Label>
-                          <Input
-                            id="city"
-                            type="text"
-                            placeholder="Москва"
-                            value={city}
-                            onChange={(e) => setCity(e.target.value)}
-                            required
-                          />
+                          <Popover open={openCityPopover} onOpenChange={setOpenCityPopover}>
+                            <PopoverTrigger asChild>
+                              <Button
+                                variant="outline"
+                                role="combobox"
+                                aria-expanded={openCityPopover}
+                                className="w-full justify-between font-normal"
+                              >
+                                {city || "Выберите город"}
+                                <Icon name="ChevronsUpDown" size={16} className="ml-2 opacity-50" />
+                              </Button>
+                            </PopoverTrigger>
+                            <PopoverContent className="w-full p-0" align="start">
+                              <Command>
+                                <CommandInput 
+                                  placeholder="Поиск города..." 
+                                  value={city}
+                                  onValueChange={setCity}
+                                />
+                                <CommandList>
+                                  <CommandEmpty>Город не найден</CommandEmpty>
+                                  <CommandGroup>
+                                    {filteredCities.slice(0, 50).map((cityName) => (
+                                      <CommandItem
+                                        key={cityName}
+                                        value={cityName}
+                                        onSelect={(currentValue) => {
+                                          setCity(currentValue);
+                                          setOpenCityPopover(false);
+                                        }}
+                                      >
+                                        <Icon
+                                          name="Check"
+                                          size={16}
+                                          className={city === cityName ? "mr-2 opacity-100" : "mr-2 opacity-0"}
+                                        />
+                                        {cityName}
+                                      </CommandItem>
+                                    ))}
+                                  </CommandGroup>
+                                </CommandList>
+                              </Command>
+                            </PopoverContent>
+                          </Popover>
                         </div>
 
                         <div className="space-y-2">
