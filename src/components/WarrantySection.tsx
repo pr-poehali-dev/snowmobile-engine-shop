@@ -4,15 +4,15 @@ import Icon from '@/components/ui/icon';
 
 const WarrantySection = () => {
   return (
-    <section id="warranty" className="py-20">
-      <div className="container">
+    <section id="warranty" className="py-12 md:py-20">
+      <div className="container px-4">
         <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-bold mb-4">Гарантия</h2>
-            <p className="text-xl text-muted-foreground">Мы гарантируем качество нашей продукции</p>
+          <div className="text-center mb-8 md:mb-12">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-3 md:mb-4">Гарантия</h2>
+            <p className="text-base md:text-lg lg:text-xl text-muted-foreground">Мы гарантируем качество нашей продукции</p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-6 mb-8">
+          <div className="grid sm:grid-cols-2 gap-4 md:gap-6 mb-6 md:mb-8">
             <Card>
               <CardHeader>
                 <Icon name="Shield" className="text-primary mb-2" size={32} />

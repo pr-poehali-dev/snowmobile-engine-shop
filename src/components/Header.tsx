@@ -34,13 +34,60 @@ const Header = ({
 }: HeaderProps) => {
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-16 items-center justify-between">
-        <div className="flex items-center gap-2">
-          <div className="w-10 h-10 bg-primary flex items-center justify-center">
-            <Icon name="Zap" className="text-primary-foreground" size={24} />
+      <div className="container flex h-14 md:h-16 items-center justify-between px-4">
+        <div className="flex items-center gap-1.5 md:gap-2">
+          <div className="w-8 h-8 md:w-10 md:h-10 bg-primary flex items-center justify-center rounded">
+            <Icon name="Zap" className="text-primary-foreground" size={20} />
           </div>
-          <span className="text-xl font-bold tracking-tight">МОТОДВНИ</span>
+          <span className="text-base md:text-xl font-bold tracking-tight">МОТОДВНИ</span>
         </div>
+
+        <Sheet>
+          <SheetTrigger asChild>
+            <Button variant="ghost" size="sm" className="md:hidden">
+              <Icon name="Menu" size={24} />
+            </Button>
+          </SheetTrigger>
+          <SheetContent side="left" className="w-64">
+            <SheetHeader>
+              <SheetTitle>Меню</SheetTitle>
+            </SheetHeader>
+            <nav className="flex flex-col gap-4 mt-8">
+              <button
+                onClick={() => scrollToSection('home')}
+                className={`text-left text-base font-medium transition-colors hover:text-primary ${
+                  activeSection === 'home' ? 'text-primary' : 'text-muted-foreground'
+                }`}
+              >
+                Главная
+              </button>
+              <button
+                onClick={() => scrollToSection('catalog')}
+                className={`text-left text-base font-medium transition-colors hover:text-primary ${
+                  activeSection === 'catalog' ? 'text-primary' : 'text-muted-foreground'
+                }`}
+              >
+                Каталог
+              </button>
+              <button
+                onClick={() => scrollToSection('delivery')}
+                className={`text-left text-base font-medium transition-colors hover:text-primary ${
+                  activeSection === 'delivery' ? 'text-primary' : 'text-muted-foreground'
+                }`}
+              >
+                Доставка
+              </button>
+              <button
+                onClick={() => scrollToSection('warranty')}
+                className={`text-left text-base font-medium transition-colors hover:text-primary ${
+                  activeSection === 'warranty' ? 'text-primary' : 'text-muted-foreground'
+                }`}
+              >
+                Гарантия
+              </button>
+            </nav>
+          </SheetContent>
+        </Sheet>
 
         <nav className="hidden md:flex items-center gap-8">
           <button

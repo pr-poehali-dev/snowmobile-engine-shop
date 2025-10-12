@@ -322,14 +322,14 @@ const Index = () => {
 
       <HeroSection scrollToSection={scrollToSection} />
 
-      <section id="catalog" className="py-20" itemScope itemType="https://schema.org/ItemList">
-        <div className="container">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-bold mb-4" itemProp="name">Каталог двигателей Lifan для снегоходов</h2>
-            <p className="text-xl text-muted-foreground" itemProp="description">Мощные двигатели от 27 до 31 л.с. для Буран, Тайга, Рысь, Ямаха, BRP. С инжектором и электростартером.</p>
+      <section id="catalog" className="py-12 md:py-20" itemScope itemType="https://schema.org/ItemList">
+        <div className="container px-4">
+          <div className="text-center mb-8 md:mb-12">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-3 md:mb-4" itemProp="name">Каталог двигателей Lifan для снегоходов</h2>
+            <p className="text-base md:text-lg lg:text-xl text-muted-foreground" itemProp="description">Мощные двигатели от 27 до 31 л.с. для Буран, Тайга, Рысь, Ямаха, BRP. С инжектором и электростартером.</p>
           </div>
 
-          <div className="space-y-12">
+          <div className="space-y-8 md:space-y-12">
             {products.map(product => (
               <ProductCard 
                 key={product.id} 

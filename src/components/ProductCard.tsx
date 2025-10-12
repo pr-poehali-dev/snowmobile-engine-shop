@@ -34,12 +34,12 @@ interface ProductCardProps {
 const ProductCard = ({ product, addToCart }: ProductCardProps) => {
   return (
     <Card className="max-w-6xl mx-auto overflow-hidden" itemScope itemType="https://schema.org/Product">
-      <div className="grid md:grid-cols-2 gap-6 p-6">
-        <div className="space-y-4">
+      <div className="grid md:grid-cols-2 gap-4 md:gap-6 p-4 md:p-6">
+        <div className="space-y-3 md:space-y-4">
           <div className="aspect-square rounded-lg overflow-hidden bg-muted">
             <img src={product.image} alt={`${product.name} - двигатель для снегохода`} className="w-full h-full object-cover" itemProp="image" />
           </div>
-          <div className="grid grid-cols-4 gap-2">
+          <div className="hidden md:grid grid-cols-4 gap-2">
             {[1, 2, 3, 4].map(i => (
               <div key={i} className="aspect-square rounded overflow-hidden bg-muted border border-border">
                 <img src={i === 1 ? 'https://cdn.poehali.dev/files/700d9be4-3169-41d9-825e-811c040aa808.png' : product.image} alt="" className="w-full h-full object-cover opacity-60" />
@@ -48,29 +48,29 @@ const ProductCard = ({ product, addToCart }: ProductCardProps) => {
           </div>
         </div>
 
-        <div className="space-y-6">
+        <div className="space-y-4 md:space-y-6">
           <div>
-            <Badge className="mb-2 bg-primary text-primary-foreground">В наличии</Badge>
-            <h3 className="text-3xl font-bold mb-2" itemProp="name">{product.name}</h3>
-            <p className="text-muted-foreground" itemProp="description">Профессиональный двигатель для снегоходов Буран, Тайга, Рысь, Ямаха, BRP</p>
+            <Badge className="mb-2 bg-primary text-primary-foreground text-xs">В наличии</Badge>
+            <h3 className="text-2xl md:text-3xl font-bold mb-2" itemProp="name">{product.name}</h3>
+            <p className="text-sm md:text-base text-muted-foreground" itemProp="description">Профессиональный двигатель для снегоходов Буран, Тайга, Рысь, Ямаха, BRP</p>
           </div>
 
           <div className="flex items-baseline gap-4" itemProp="offers" itemScope itemType="https://schema.org/Offer">
             <meta itemProp="priceCurrency" content="RUB" />
             <meta itemProp="availability" content="https://schema.org/InStock" />
-            <span className="text-4xl font-bold text-primary" itemProp="price" content={product.price.toString()}>{product.price.toLocaleString('ru-RU')} ₽</span>
+            <span className="text-3xl md:text-4xl font-bold text-primary" itemProp="price" content={product.price.toString()}>{product.price.toLocaleString('ru-RU')} ₽</span>
           </div>
 
-          <div className="flex gap-4">
-            <div className="flex-1 bg-muted rounded-lg p-4 text-center">
-              <Icon name="Gauge" className="mx-auto mb-2 text-primary" size={24} />
-              <div className="font-bold">{product.power}</div>
-              <div className="text-sm text-muted-foreground">Мощность</div>
+          <div className="grid grid-cols-2 gap-3 md:gap-4">
+            <div className="bg-muted rounded-lg p-3 md:p-4 text-center">
+              <Icon name="Gauge" className="mx-auto mb-1 md:mb-2 text-primary" size={20} />
+              <div className="font-bold text-sm md:text-base">{product.power}</div>
+              <div className="text-xs md:text-sm text-muted-foreground">Мощность</div>
             </div>
-            <div className="flex-1 bg-muted rounded-lg p-4 text-center">
-              <Icon name="Box" className="mx-auto mb-2 text-primary" size={24} />
-              <div className="font-bold">{product.volume}</div>
-              <div className="text-sm text-muted-foreground">Объём</div>
+            <div className="bg-muted rounded-lg p-3 md:p-4 text-center">
+              <Icon name="Box" className="mx-auto mb-1 md:mb-2 text-primary" size={20} />
+              <div className="font-bold text-sm md:text-base">{product.volume}</div>
+              <div className="text-xs md:text-sm text-muted-foreground">Объём</div>
             </div>
           </div>
 

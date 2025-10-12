@@ -4,15 +4,15 @@ import Icon from '@/components/ui/icon';
 
 const DeliverySection = () => {
   return (
-    <section id="delivery" className="py-20 bg-muted/50">
-      <div className="container">
+    <section id="delivery" className="py-12 md:py-20 bg-muted/50">
+      <div className="container px-4">
         <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-bold mb-4">Доставка</h2>
-            <p className="text-xl text-muted-foreground">Быстрая и надёжная доставка по всей России</p>
+          <div className="text-center mb-8 md:mb-12">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-3 md:mb-4">Доставка</h2>
+            <p className="text-base md:text-lg lg:text-xl text-muted-foreground">Быстрая и надёжная доставка по всей России</p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
             <Card>
               <CardHeader>
                 <Icon name="Package" className="text-primary mb-2" size={32} />
