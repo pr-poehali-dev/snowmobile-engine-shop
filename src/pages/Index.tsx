@@ -19,7 +19,7 @@ const Index = () => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [activeSection, setActiveSection] = useState('home');
   const [priceRange, setPriceRange] = useState<[number, number]>([70000, 95000]);
-  const [powerRange, setPowerRange] = useState<[number, number]>([25, 30]);
+  const [powerRange, setPowerRange] = useState<[number, number]>([24, 30]);
 
   const products = [
     {
@@ -96,6 +96,52 @@ const Index = () => {
         'Колени для выхлопа на снегоход Буран',
         'Вариатор Сафари',
         'Болт для крепления вариатора',
+      ],
+    },
+    {
+      id: 'lifan-24hp',
+      name: 'Lifan 24 л.с. (подготовленный)',
+      price: 82990,
+      power: '24 л.с.',
+      volume: '688 см³',
+      image: 'https://cdn.poehali.dev/files/4becad3f-ed84-4089-a9b2-22c3af55e347.png',
+      specs: {
+        basic: [
+          { label: 'Тип двигателя', value: 'Бензиновый, двухцилиндровый' },
+          { label: 'Мощность', value: '24 л.с. (14,5 кВт при 3600 об/мин)' },
+          { label: 'Крутящий момент', value: '42 Н·м при 2500 об/мин' },
+          { label: 'Рабочий объём', value: '688 см³' },
+          { label: 'Диаметр вала', value: '25 мм' },
+          { label: 'Расположение вала', value: 'Горизонтальное' },
+          { label: 'Расход топлива', value: '370 г/кВт·ч' },
+          { label: 'Объём масла', value: '1,4 л' },
+          { label: 'OEM-номер', value: 'wm21588' },
+        ],
+        electrical: [
+          { label: 'Система запуска', value: 'Ручной и электростартер' },
+          { label: 'Катушка освещения', value: '20 А' },
+          { label: 'Замок зажигания', value: 'Выведен для установки' },
+          { label: 'Проводка', value: 'Выведена и подготовлена' },
+        ],
+        physical: [
+          { label: 'Габариты (ДxШxВ)', value: '450 × 455 × 400 мм' },
+          { label: 'Вес', value: '59 кг' },
+          { label: 'Материал', value: 'Сталь' },
+          { label: 'Цвет', value: 'Черный' },
+          { label: 'Страна производства', value: 'Россия, Китай' },
+          { label: 'Гарантия', value: '6 месяцев' },
+        ],
+      },
+      compatibility: ['Буран', 'Тайга (с доработками)', 'Рысь', 'Ямаха', 'BRP старых годов'],
+      complectation: [
+        'Двигатель Lifan 24 л.с. (подготовленный)',
+        'Вариатор Сафари (установлен)',
+        'Патрубки для глушителя Буран',
+        'Счетчик моточасов',
+        'Болт крепления вариатора',
+        'Ручной стартер',
+        'Электростартер',
+        'Инструкция по установке и эксплуатации',
       ],
     },
   ];
