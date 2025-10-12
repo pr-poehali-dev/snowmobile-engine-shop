@@ -51,24 +51,25 @@ const Header = ({
     setIsSubmitting(true);
 
     try {
-      const response = await fetch('https://functions.poehali.dev/327d925f-d205-4ad7-9c4a-8105efcefb47', {
+      const response = await fetch('https://functions.poehali.dev/14166080-7df3-43be-8985-e12ee3235156', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
+          fullName: fullName || 'Не указано',
           phone,
           city,
-          fullName,
-          cartItems,
-          totalPrice
+          items: cartItems,
+          totalPrice,
+          totalItems
         })
       });
 
       const data = await response.json();
 
       if (response.ok && data.success) {
-        alert(`✅ Заявка успешно отправлена!\n\nМы свяжемся с вами по телефону: ${phone}`);
+        alert(`✅ Заказ успешно оформлен!\n\nНомер заказа: ${data.orderNumber}\n\nМы свяжемся с вами по телефону: ${phone}`);
         
         setShowOrderForm(false);
         setPhone('');
