@@ -8,18 +8,34 @@ interface HeroSectionProps {
 }
 
 const HeroSection = ({ scrollToSection }: HeroSectionProps) => {
-  const engineImages = [
-    'https://cdn.poehali.dev/files/4c1f2bc5-fd6e-4a17-9031-1deacf7cdb07.png',
-    'https://cdn.poehali.dev/files/35584b42-c3c3-498e-b470-bc3a63a94a8c.png',
-    'https://cdn.poehali.dev/files/4becad3f-ed84-4089-a9b2-22c3af55e347.png',
-    'https://cdn.poehali.dev/files/892c1c7d-757e-46c2-881a-804abc3875e9.png',
+  const engines = [
+    {
+      image: 'https://cdn.poehali.dev/files/4c1f2bc5-fd6e-4a17-9031-1deacf7cdb07.png',
+      name: 'Lifan 27 л.с.',
+      price: '69 990 ₽'
+    },
+    {
+      image: 'https://cdn.poehali.dev/files/35584b42-c3c3-498e-b470-bc3a63a94a8c.png',
+      name: 'Lifan 29 л.с.',
+      price: '76 990 ₽'
+    },
+    {
+      image: 'https://cdn.poehali.dev/files/4becad3f-ed84-4089-a9b2-22c3af55e347.png',
+      name: 'Lifan 24 л.с.',
+      price: '82 990 ₽'
+    },
+    {
+      image: 'https://cdn.poehali.dev/files/892c1c7d-757e-46c2-881a-804abc3875e9.png',
+      name: 'Lifan 31 л.с. (инжектор)',
+      price: '99 990 ₽'
+    },
   ];
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % engineImages.length);
+      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % engines.length);
     }, 3000);
 
     return () => clearInterval(interval);
@@ -50,23 +66,27 @@ const HeroSection = ({ scrollToSection }: HeroSectionProps) => {
           </div>
           <div className="relative animate-scale-in mt-8 lg:mt-0">
             <div className="absolute inset-0 bg-primary/20 blur-3xl" />
-            <div className="relative w-full rounded-lg overflow-hidden shadow-2xl">
+            <div className="relative w-full rounded-lg overflow-hidden shadow-2xl bg-muted">
               <img
-                src={engineImages[currentImageIndex]}
-                alt="Двигатель Lifan для снегохода"
+                src={engines[currentImageIndex].image}
+                alt={engines[currentImageIndex].name}
                 className="w-full h-auto transition-opacity duration-1000 ease-in-out"
               />
-              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
-                {engineImages.map((_, index) => (
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-background/95 to-background/0 p-4 md:p-6">
+                <h3 className="text-xl md:text-2xl font-bold mb-1">{engines[currentImageIndex].name}</h3>
+                <p className="text-lg md:text-xl text-primary font-semibold">от {engines[currentImageIndex].price}</p>
+              </div>
+              <div className="absolute top-4 left-1/2 -translate-x-1/2 flex gap-2">
+                {engines.map((_, index) => (
                   <button
                     key={index}
                     onClick={() => setCurrentImageIndex(index)}
                     className={`w-2 h-2 rounded-full transition-all ${
                       index === currentImageIndex
                         ? 'bg-primary w-8'
-                        : 'bg-primary/30 hover:bg-primary/50'
+                        : 'bg-background/50 hover:bg-background/70'
                     }`}
-                    aria-label={`Переключить на изображение ${index + 1}`}
+                    aria-label={`Переключить на ${engines[index].name}`}
                   />
                 ))}
               </div>
