@@ -33,11 +33,11 @@ interface ProductCardProps {
 
 const ProductCard = ({ product, addToCart }: ProductCardProps) => {
   return (
-    <Card className="max-w-6xl mx-auto overflow-hidden">
+    <Card className="max-w-6xl mx-auto overflow-hidden" itemScope itemType="https://schema.org/Product">
       <div className="grid md:grid-cols-2 gap-6 p-6">
         <div className="space-y-4">
           <div className="aspect-square rounded-lg overflow-hidden bg-muted">
-            <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
+            <img src={product.image} alt={`${product.name} - двигатель для снегохода`} className="w-full h-full object-cover" itemProp="image" />
           </div>
           <div className="grid grid-cols-4 gap-2">
             {[1, 2, 3, 4].map(i => (
@@ -51,12 +51,14 @@ const ProductCard = ({ product, addToCart }: ProductCardProps) => {
         <div className="space-y-6">
           <div>
             <Badge className="mb-2 bg-primary text-primary-foreground">В наличии</Badge>
-            <h3 className="text-3xl font-bold mb-2">{product.name}</h3>
-            <p className="text-muted-foreground">Профессиональный двигатель для снегоходов</p>
+            <h3 className="text-3xl font-bold mb-2" itemProp="name">{product.name}</h3>
+            <p className="text-muted-foreground" itemProp="description">Профессиональный двигатель для снегоходов Буран, Тайга, Рысь, Ямаха, BRP</p>
           </div>
 
-          <div className="flex items-baseline gap-4">
-            <span className="text-4xl font-bold text-primary">{product.price.toLocaleString('ru-RU')} ₽</span>
+          <div className="flex items-baseline gap-4" itemProp="offers" itemScope itemType="https://schema.org/Offer">
+            <meta itemProp="priceCurrency" content="RUB" />
+            <meta itemProp="availability" content="https://schema.org/InStock" />
+            <span className="text-4xl font-bold text-primary" itemProp="price" content={product.price.toString()}>{product.price.toLocaleString('ru-RU')} ₽</span>
           </div>
 
           <div className="flex gap-4">

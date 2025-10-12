@@ -8,17 +8,17 @@ interface HeroSectionProps {
 
 const HeroSection = ({ scrollToSection }: HeroSectionProps) => {
   return (
-    <section id="home" className="relative py-20 overflow-hidden">
+    <section id="home" className="relative py-20 overflow-hidden" itemScope itemType="https://schema.org/Product">
       <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-background to-background" />
       <div className="container relative">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div className="space-y-6 animate-fade-in">
             <Badge className="bg-primary text-primary-foreground">Профессиональное оборудование</Badge>
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight">
-              Двигатели для снегоходов
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight" itemProp="name">
+              Двигатели Lifan для снегоходов Буран, Тайга, Рысь
             </h1>
-            <p className="text-xl text-muted-foreground">
-              Надёжные моторы Lifan для Бурана, Тайги, Рыси и самодельной техники
+            <p className="text-xl text-muted-foreground" itemProp="description">
+              Мощные и надёжные двигатели Lifan от 27 до 31 л.с. для снегоходов Буран, Тайга, Рысь, Ямаха, BRP. Инжектор, электростартер, гарантия до 2 лет. Полная комплектация с вариатором Сафари.
             </p>
             <div className="flex flex-wrap gap-4">
               <Button size="lg" onClick={() => scrollToSection('catalog')}>

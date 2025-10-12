@@ -322,11 +322,11 @@ const Index = () => {
 
       <HeroSection scrollToSection={scrollToSection} />
 
-      <section id="catalog" className="py-20">
+      <section id="catalog" className="py-20" itemScope itemType="https://schema.org/ItemList">
         <div className="container">
           <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-bold mb-4">Каталог двигателей</h2>
-            <p className="text-xl text-muted-foreground">Профессиональное оборудование для мототехники</p>
+            <h2 className="text-4xl md:text-5xl font-bold mb-4" itemProp="name">Каталог двигателей Lifan для снегоходов</h2>
+            <p className="text-xl text-muted-foreground" itemProp="description">Мощные двигатели от 27 до 31 л.с. для Буран, Тайга, Рысь, Ямаха, BRP. С инжектором и электростартером.</p>
           </div>
 
           <div className="space-y-12">
