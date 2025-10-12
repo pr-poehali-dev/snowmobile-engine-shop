@@ -114,6 +114,15 @@ const Header = ({
       const data = await response.json();
 
       if (response.ok && data.success) {
+        if (typeof window !== 'undefined' && (window as any).ym) {
+          (window as any).ym(104609660, 'reachGoal', 'order_success', {
+            order_id: data.orderNumber,
+            order_price: totalPrice,
+            order_items: totalItems,
+            city: city
+          });
+        }
+        
         alert(`✅ Заказ успешно оформлен!\n\nНомер заказа: ${data.orderNumber}\n\nМы свяжемся с вами по телефону: ${phone}`);
         
         setShowOrderForm(false);

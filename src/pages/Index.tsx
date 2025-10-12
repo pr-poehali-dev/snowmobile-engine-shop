@@ -284,6 +284,14 @@ const Index = () => {
         quantity: 1,
         image: product.image,
       }]);
+      
+      if (typeof window !== 'undefined' && (window as any).ym) {
+        (window as any).ym(104609660, 'reachGoal', 'add_to_cart', {
+          product_id: product.id,
+          product_name: product.name,
+          product_price: product.price
+        });
+      }
     }
   };
 
