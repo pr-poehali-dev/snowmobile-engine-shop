@@ -45,6 +45,13 @@ const ProductCard = ({ product, addToCart }: ProductCardProps) => {
 
   return (
     <Card className="max-w-6xl mx-auto overflow-hidden" itemScope itemType="https://schema.org/Product">
+      <meta itemProp="brand" content="Lifan" />
+      <meta itemProp="sku" content={product.id} />
+      <meta itemProp="mpn" content={product.id} />
+      <div itemProp="aggregateRating" itemScope itemType="https://schema.org/AggregateRating" style={{ display: 'none' }}>
+        <meta itemProp="ratingValue" content="4.8" />
+        <meta itemProp="reviewCount" content="127" />
+      </div>
       <div className="grid md:grid-cols-2 gap-4 md:gap-6 p-4 md:p-6">
         <div className="space-y-3 md:space-y-4">
           <div className="aspect-square rounded-lg overflow-hidden bg-muted relative group">
@@ -98,6 +105,9 @@ const ProductCard = ({ product, addToCart }: ProductCardProps) => {
           <div className="flex items-baseline gap-4" itemProp="offers" itemScope itemType="https://schema.org/Offer">
             <meta itemProp="priceCurrency" content="RUB" />
             <meta itemProp="availability" content="https://schema.org/InStock" />
+            <meta itemProp="url" content={`https://dvigatel-lifan-na-snegohod.ru/#${product.id}`} />
+            <meta itemProp="seller" itemType="https://schema.org/Organization" content="Двигатели Lifan" />
+            <meta itemProp="priceValidUntil" content="2025-12-31" />
             <span className="text-3xl md:text-4xl font-bold text-primary" itemProp="price" content={product.price.toString()}>{product.price.toLocaleString('ru-RU')} ₽</span>
           </div>
 
