@@ -29,10 +29,14 @@ const OrdersTable = ({
   onStatusUpdate,
 }: OrdersTableProps) => {
   const getStatusBadge = (status: string) => {
-    const variants: Record<string, 'default' | 'secondary' | 'outline'> = {
+    const variants: Record<string, 'default' | 'secondary' | 'outline' | 'destructive'> = {
       'новый': 'default',
       'в обработке': 'secondary',
+      'готов к отгрузке': 'outline',
+      'оплачен': 'default',
+      'в пути': 'secondary',
       'выполнен': 'outline',
+      'отменен': 'destructive',
     };
 
     return (
@@ -67,6 +71,9 @@ const OrdersTable = ({
               <SelectItem value="все">Все статусы</SelectItem>
               <SelectItem value="новый">Новый</SelectItem>
               <SelectItem value="в обработке">В обработке</SelectItem>
+              <SelectItem value="готов к отгрузке">Готов к отгрузке</SelectItem>
+              <SelectItem value="оплачен">Оплачен</SelectItem>
+              <SelectItem value="в пути">В пути</SelectItem>
               <SelectItem value="выполнен">Выполнен</SelectItem>
               <SelectItem value="отменен">Отменен</SelectItem>
             </SelectContent>
@@ -135,6 +142,11 @@ const OrdersTable = ({
                             <SelectItem value="в обработке">
                               В обработке
                             </SelectItem>
+                            <SelectItem value="готов к отгрузке">
+                              Готов к отгрузке
+                            </SelectItem>
+                            <SelectItem value="оплачен">Оплачен</SelectItem>
+                            <SelectItem value="в пути">В пути</SelectItem>
                             <SelectItem value="выполнен">Выполнен</SelectItem>
                             <SelectItem value="отменен">Отменен</SelectItem>
                           </SelectContent>
