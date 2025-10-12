@@ -32,18 +32,14 @@ const HeroSection = ({ scrollToSection }: HeroSectionProps) => {
           </div>
           <div className="relative animate-scale-in mt-8 lg:mt-0">
             <div className="absolute inset-0 bg-primary/20 blur-3xl" />
-            <video
-              src="https://disk.yandex.ru/i/YOQwS_OTqeL2vA"
-              autoPlay
-              loop
-              muted
-              playsInline
-              className="relative w-full rounded-lg shadow-2xl"
-              poster="https://cdn.poehali.dev/files/b372e95b-2fde-4136-be71-7043452fda66.png"
-            >
-              <source src="https://disk.yandex.ru/i/YOQwS_OTqeL2vA" type="video/mp4" />
-              Ваш браузер не поддерживает видео
-            </video>
+            <div className="relative w-full rounded-lg overflow-hidden shadow-2xl aspect-video">
+              <iframe
+                src="https://drive.google.com/file/d/1DBUEe4pFHUZOppMYiYGJa3C5rcTaH6Pr/preview"
+                className="w-full h-full"
+                allow="autoplay"
+                allowFullScreen
+              />
+            </div>
           </div>
         </div>
       </div>
