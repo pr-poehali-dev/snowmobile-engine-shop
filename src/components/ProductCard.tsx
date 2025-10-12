@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -17,6 +18,7 @@ interface Product {
   power: string;
   volume: string;
   image: string;
+  images?: string[];
   specs: {
     basic: ProductSpec[];
     electrical: ProductSpec[];
@@ -32,18 +34,56 @@ interface ProductCardProps {
 }
 
 const ProductCard = ({ product, addToCart }: ProductCardProps) => {
+  const allImages = product.images || [
+    product.image,
+    'https://cdn.poehali.dev/files/700d9be4-3169-41d9-825e-811c040aa808.png',
+    product.image,
+    product.image
+  ];
+  
+  const [selectedImage, setSelectedImage] = useState(0);
+
   return (
     <Card className="max-w-6xl mx-auto overflow-hidden" itemScope itemType="https://schema.org/Product">
       <div className="grid md:grid-cols-2 gap-4 md:gap-6 p-4 md:p-6">
         <div className="space-y-3 md:space-y-4">
-          <div className="aspect-square rounded-lg overflow-hidden bg-muted">
-            <img src={product.image} alt={`${product.name} - двигатель для снегохода`} className="w-full h-full object-cover" itemProp="image" />
+          <div className="aspect-square rounded-lg overflow-hidden bg-muted relative group">
+            <img 
+              src={allImages[selectedImage]} 
+              alt={`${product.name} - двигатель для снегохода`} 
+              className="w-full h-full object-cover transition-transform duration-300" 
+              itemProp="image" 
+            />
+            <Button
+              variant="ghost"
+              size="icon"
+              className="absolute left-2 top-1/2 -translate-y-1/2 bg-background/80 hover:bg-background opacity-0 group-hover:opacity-100 transition-opacity"
+              onClick={() => setSelectedImage((selectedImage - 1 + allImages.length) % allImages.length)}
+              aria-label="Предыдущее изображение"
+            >
+              <Icon name="ChevronLeft" size={24} />
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="absolute right-2 top-1/2 -translate-y-1/2 bg-background/80 hover:bg-background opacity-0 group-hover:opacity-100 transition-opacity"
+              onClick={() => setSelectedImage((selectedImage + 1) % allImages.length)}
+              aria-label="Следующее изображение"
+            >
+              <Icon name="ChevronRight" size={24} />
+            </Button>
           </div>
-          <div className="hidden md:grid grid-cols-4 gap-2">
-            {[1, 2, 3, 4].map(i => (
-              <div key={i} className="aspect-square rounded overflow-hidden bg-muted border border-border">
-                <img src={i === 1 ? 'https://cdn.poehali.dev/files/700d9be4-3169-41d9-825e-811c040aa808.png' : product.image} alt="" className="w-full h-full object-cover opacity-60" />
-              </div>
+          <div className="grid grid-cols-4 gap-2">
+            {allImages.map((img, i) => (
+              <button
+                key={i}
+                onClick={() => setSelectedImage(i)}
+                className={`aspect-square rounded overflow-hidden bg-muted border-2 transition-all ${
+                  selectedImage === i ? 'border-primary' : 'border-border hover:border-primary/50'
+                }`}
+              >
+                <img src={img} alt="" className="w-full h-full object-cover" />
+              </button>
             ))}
           </div>
         </div>
