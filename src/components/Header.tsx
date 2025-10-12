@@ -1,8 +1,11 @@
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import Icon from '@/components/ui/icon';
 
 interface CartItem {
@@ -32,6 +35,24 @@ const Header = ({
   totalPrice,
   totalItems,
 }: HeaderProps) => {
+  const [showOrderForm, setShowOrderForm] = useState(false);
+  const [phone, setPhone] = useState('');
+  const [city, setCity] = useState('');
+  const [fullName, setFullName] = useState('');
+
+  const isFormValid = phone.trim().length > 0 && city.trim().length > 0;
+
+  const handleSubmitOrder = () => {
+    if (!isFormValid) return;
+    
+    console.log('Order submitted:', { phone, city, fullName, cartItems, totalPrice });
+    alert(`Заявка отправлена!\n\nТелефон: ${phone}\nГород: ${city}${fullName ? `\nФИО: ${fullName}` : ''}`);
+    
+    setShowOrderForm(false);
+    setPhone('');
+    setCity('');
+    setFullName('');
+  };
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-14 md:h-16 items-center justify-between px-4">
@@ -192,15 +213,86 @@ const Header = ({
                     ))}
                   </div>
                   <Separator />
-                  <div className="space-y-4">
-                    <div className="flex justify-between text-lg font-bold">
-                      <span>Итого:</span>
-                      <span>{totalPrice.toLocaleString('ru-RU')} ₽</span>
+                  {!showOrderForm ? (
+                    <div className="space-y-4">
+                      <div className="flex justify-between text-lg font-bold">
+                        <span>Итого:</span>
+                        <span>{totalPrice.toLocaleString('ru-RU')} ₽</span>
+                      </div>
+                      <Button 
+                        className="w-full" 
+                        size="lg"
+                        onClick={() => setShowOrderForm(true)}
+                      >
+                        Оформить заказ
+                      </Button>
                     </div>
-                    <Button className="w-full" size="lg">
-                      Оформить заказ
-                    </Button>
-                  </div>
+                  ) : (
+                    <div className="space-y-4">
+                      <div className="flex justify-between text-lg font-bold mb-4">
+                        <span>Итого:</span>
+                        <span>{totalPrice.toLocaleString('ru-RU')} ₽</span>
+                      </div>
+                      
+                      <div className="space-y-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="phone">
+                            Телефон <span className="text-destructive">*</span>
+                          </Label>
+                          <Input
+                            id="phone"
+                            type="tel"
+                            placeholder="+7 (___) ___-__-__"
+                            value={phone}
+                            onChange={(e) => setPhone(e.target.value)}
+                            required
+                          />
+                        </div>
+
+                        <div className="space-y-2">
+                          <Label htmlFor="city">
+                            Город получения <span className="text-destructive">*</span>
+                          </Label>
+                          <Input
+                            id="city"
+                            type="text"
+                            placeholder="Москва"
+                            value={city}
+                            onChange={(e) => setCity(e.target.value)}
+                            required
+                          />
+                        </div>
+
+                        <div className="space-y-2">
+                          <Label htmlFor="fullName">ФИО (опционально)</Label>
+                          <Input
+                            id="fullName"
+                            type="text"
+                            placeholder="Иванов Иван Иванович"
+                            value={fullName}
+                            onChange={(e) => setFullName(e.target.value)}
+                          />
+                        </div>
+                      </div>
+
+                      <div className="flex gap-2">
+                        <Button
+                          variant="outline"
+                          className="flex-1"
+                          onClick={() => setShowOrderForm(false)}
+                        >
+                          Назад
+                        </Button>
+                        <Button
+                          className="flex-1"
+                          onClick={handleSubmitOrder}
+                          disabled={!isFormValid}
+                        >
+                          Отправить заявку
+                        </Button>
+                      </div>
+                    </div>
+                  )}
                 </>
               )}
             </div>
