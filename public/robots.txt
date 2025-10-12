@@ -1,14 +1,24 @@
+User-agent: *
+Allow: /
+
+# Запрещаем индексацию служебных файлов
+Disallow: /assets/
+Disallow: /*.json$
+
+# Указываем путь к карте сайта
+Sitemap: https://dvigatel-lifan-na-snegohod.ru/sitemap.xml
+
+# Настройки для Яндекса
+User-agent: Yandex
+Allow: /
+
+# Настройки для Google
 User-agent: Googlebot
 Allow: /
 
+# Настройки для Bing
 User-agent: Bingbot
 Allow: /
 
-User-agent: Twitterbot
-Allow: /
-
-User-agent: facebookexternalhit
-Allow: /
-
-User-agent: *
-Allow: /
+# Время между запросами (в секундах)
+Crawl-delay: 1
