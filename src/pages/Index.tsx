@@ -5,6 +5,7 @@ import ProductCard from '@/components/ProductCard';
 import DeliverySection from '@/components/DeliverySection';
 import WarrantySection from '@/components/WarrantySection';
 import Footer from '@/components/Footer';
+import AIAssistant from '@/components/AIAssistant';
 
 interface CartItem {
   id: string;
@@ -346,6 +347,8 @@ const Index = () => {
       <WarrantySection />
 
       <Footer />
+
+      <AIAssistant />
     </div>
   );
 };
