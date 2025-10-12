@@ -1,0 +1,47 @@
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import Icon from '@/components/ui/icon';
+
+interface HeroSectionProps {
+  scrollToSection: (section: string) => void;
+}
+
+const HeroSection = ({ scrollToSection }: HeroSectionProps) => {
+  return (
+    <section id="home" className="relative py-20 overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-background to-background" />
+      <div className="container relative">
+        <div className="grid lg:grid-cols-2 gap-12 items-center">
+          <div className="space-y-6 animate-fade-in">
+            <Badge className="bg-primary text-primary-foreground">Профессиональное оборудование</Badge>
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight">
+              Двигатели для снегоходов
+            </h1>
+            <p className="text-xl text-muted-foreground">
+              Надёжные моторы Lifan для Бурана, Тайги, Рыси и самодельной техники
+            </p>
+            <div className="flex flex-wrap gap-4">
+              <Button size="lg" onClick={() => scrollToSection('catalog')}>
+                <Icon name="Zap" className="mr-2" size={20} />
+                Смотреть каталог
+              </Button>
+              <Button size="lg" variant="outline" onClick={() => scrollToSection('warranty')}>
+                Гарантия
+              </Button>
+            </div>
+          </div>
+          <div className="relative animate-scale-in">
+            <div className="absolute inset-0 bg-primary/20 blur-3xl" />
+            <img
+              src="https://cdn.poehali.dev/files/b372e95b-2fde-4136-be71-7043452fda66.png"
+              alt="Lifan Engine"
+              className="relative w-full rounded-lg"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default HeroSection;
