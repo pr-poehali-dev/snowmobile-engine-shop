@@ -56,8 +56,7 @@ const ProductCard = ({ product, addToCart }: ProductCardProps) => {
           </div>
 
           <div className="flex items-baseline gap-4">
-            <span className="text-4xl font-bold text-primary">69990
-</span>
+            <span className="text-4xl font-bold text-primary">{product.price.toLocaleString('ru-RU')} ₽</span>
           </div>
 
           <div className="flex gap-4">
