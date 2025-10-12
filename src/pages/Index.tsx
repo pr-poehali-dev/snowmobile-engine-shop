@@ -291,6 +291,10 @@ const Index = () => {
     setCartItems(cartItems.filter(item => item.id !== id));
   };
 
+  const clearCart = () => {
+    setCartItems([]);
+  };
+
   const updateQuantity = (id: string, quantity: number) => {
     if (quantity <= 0) {
       removeFromCart(id);
@@ -318,6 +322,7 @@ const Index = () => {
         cartItems={cartItems}
         updateQuantity={updateQuantity}
         removeFromCart={removeFromCart}
+        clearCart={clearCart}
         totalPrice={totalPrice}
         totalItems={totalItems}
       />

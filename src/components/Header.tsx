@@ -22,6 +22,7 @@ interface HeaderProps {
   cartItems: CartItem[];
   updateQuantity: (id: string, quantity: number) => void;
   removeFromCart: (id: string) => void;
+  clearCart: () => void;
   totalPrice: number;
   totalItems: number;
 }
@@ -32,6 +33,7 @@ const Header = ({
   cartItems,
   updateQuantity,
   removeFromCart,
+  clearCart,
   totalPrice,
   totalItems,
 }: HeaderProps) => {
@@ -72,6 +74,7 @@ const Header = ({
         setPhone('');
         setCity('');
         setFullName('');
+        clearCart();
       } else {
         alert('❌ Ошибка при отправке заявки. Попробуйте позже или свяжитесь с нами по телефону.');
       }
