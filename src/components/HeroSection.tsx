@@ -1,18 +1,29 @@
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import Icon from '@/components/ui/icon';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface HeroSectionProps {
   scrollToSection: (section: string) => void;
 }
 
 const HeroSection = ({ scrollToSection }: HeroSectionProps) => {
-  const [isMuted, setIsMuted] = useState(true);
+  const engineImages = [
+    'https://cdn.poehali.dev/files/4c1f2bc5-fd6e-4a17-9031-1deacf7cdb07.png',
+    'https://cdn.poehali.dev/files/35584b42-c3c3-498e-b470-bc3a63a94a8c.png',
+    'https://cdn.poehali.dev/files/4becad3f-ed84-4089-a9b2-22c3af55e347.png',
+    'https://cdn.poehali.dev/files/892c1c7d-757e-46c2-881a-804abc3875e9.png',
+  ];
 
-  const toggleMute = () => {
-    setIsMuted(!isMuted);
-  };
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % engineImages.length);
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <section id="home" className="relative py-12 md:py-20 overflow-hidden" itemScope itemType="https://schema.org/Product">
@@ -39,23 +50,26 @@ const HeroSection = ({ scrollToSection }: HeroSectionProps) => {
           </div>
           <div className="relative animate-scale-in mt-8 lg:mt-0">
             <div className="absolute inset-0 bg-primary/20 blur-3xl" />
-            <div className="relative w-full rounded-lg overflow-hidden shadow-2xl aspect-video group">
-              <video
-                key={isMuted ? 'muted' : 'unmuted'}
-                src="https://disk.yandex.ru/d/YOQwS_OTqeL2vA&raw=1"
-                autoPlay
-                loop
-                muted={isMuted}
-                playsInline
-                className="w-full h-full object-cover"
+            <div className="relative w-full rounded-lg overflow-hidden shadow-2xl">
+              <img
+                src={engineImages[currentImageIndex]}
+                alt="Двигатель Lifan для снегохода"
+                className="w-full h-auto transition-opacity duration-1000 ease-in-out"
               />
-              <button
-                onClick={toggleMute}
-                className="absolute bottom-4 right-4 bg-background/80 hover:bg-background text-foreground rounded-full p-3 shadow-lg transition-all hover:scale-110 z-10"
-                aria-label={isMuted ? 'Включить звук' : 'Выключить звук'}
-              >
-                <Icon name={isMuted ? 'VolumeX' : 'Volume2'} size={20} />
-              </button>
+              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+                {engineImages.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setCurrentImageIndex(index)}
+                    className={`w-2 h-2 rounded-full transition-all ${
+                      index === currentImageIndex
+                        ? 'bg-primary w-8'
+                        : 'bg-primary/30 hover:bg-primary/50'
+                    }`}
+                    aria-label={`Переключить на изображение ${index + 1}`}
+                  />
+                ))}
+              </div>
             </div>
           </div>
         </div>
