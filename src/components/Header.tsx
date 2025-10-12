@@ -39,19 +39,48 @@ const Header = ({
   const [phone, setPhone] = useState('');
   const [city, setCity] = useState('');
   const [fullName, setFullName] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const isFormValid = phone.trim().length > 0 && city.trim().length > 0;
 
-  const handleSubmitOrder = () => {
-    if (!isFormValid) return;
+  const handleSubmitOrder = async () => {
+    if (!isFormValid || isSubmitting) return;
     
-    console.log('Order submitted:', { phone, city, fullName, cartItems, totalPrice });
-    alert(`Заявка отправлена!\n\nТелефон: ${phone}\nГород: ${city}${fullName ? `\nФИО: ${fullName}` : ''}`);
-    
-    setShowOrderForm(false);
-    setPhone('');
-    setCity('');
-    setFullName('');
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch('https://functions.poehali.dev/327d925f-d205-4ad7-9c4a-8105efcefb47', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          phone,
+          city,
+          fullName,
+          cartItems,
+          totalPrice
+        })
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        alert(`✅ Заявка успешно отправлена!\n\nМы свяжемся с вами по телефону: ${phone}`);
+        
+        setShowOrderForm(false);
+        setPhone('');
+        setCity('');
+        setFullName('');
+      } else {
+        alert('❌ Ошибка при отправке заявки. Попробуйте позже или свяжитесь с нами по телефону.');
+      }
+    } catch (error) {
+      console.error('Order submission error:', error);
+      alert('❌ Ошибка при отправке заявки. Проверьте интернет-соединение.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -280,15 +309,16 @@ const Header = ({
                           variant="outline"
                           className="flex-1"
                           onClick={() => setShowOrderForm(false)}
+                          disabled={isSubmitting}
                         >
                           Назад
                         </Button>
                         <Button
                           className="flex-1"
                           onClick={handleSubmitOrder}
-                          disabled={!isFormValid}
+                          disabled={!isFormValid || isSubmitting}
                         >
-                          Отправить заявку
+                          {isSubmitting ? 'Отправка...' : 'Отправить заявку'}
                         </Button>
                       </div>
                     </div>

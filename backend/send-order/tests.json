@@ -1,0 +1,28 @@
+{
+  "tests": [
+    {
+      "name": "Send order to Telegram",
+      "method": "POST",
+      "path": "/",
+      "body": {
+        "phone": "+7 (900) 123-45-67",
+        "city": "Москва",
+        "fullName": "Иванов Иван Иванович",
+        "cartItems": [
+          {
+            "id": "lifan-27hp",
+            "name": "Двигатель Lifan 27 л.с.",
+            "price": 69990,
+            "quantity": 1
+          }
+        ],
+        "totalPrice": 69990
+      },
+      "expectedStatus": 200,
+      "expectedBody": {
+        "success": true
+      },
+      "bodyMatcher": "partial"
+    }
+  ]
+}
