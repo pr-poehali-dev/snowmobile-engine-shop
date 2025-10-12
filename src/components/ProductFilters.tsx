@@ -6,26 +6,18 @@ import { Button } from '@/components/ui/button';
 import Icon from '@/components/ui/icon';
 
 interface ProductFiltersProps {
-  priceRange: [number, number];
   powerRange: [number, number];
-  onPriceChange: (value: [number, number]) => void;
   onPowerChange: (value: [number, number]) => void;
   onReset: () => void;
-  minPrice: number;
-  maxPrice: number;
   minPower: number;
   maxPower: number;
   resultsCount: number;
 }
 
 const ProductFilters = ({
-  priceRange,
   powerRange,
-  onPriceChange,
   onPowerChange,
   onReset,
-  minPrice,
-  maxPrice,
   minPower,
   maxPower,
   resultsCount,
@@ -45,27 +37,6 @@ const ProductFilters = ({
         </div>
       </CardHeader>
       <CardContent className="space-y-6">
-        <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <Label>Цена</Label>
-            <Badge variant="secondary">
-              {priceRange[0].toLocaleString('ru-RU')} - {priceRange[1].toLocaleString('ru-RU')} ₽
-            </Badge>
-          </div>
-          <Slider
-            min={minPrice}
-            max={maxPrice}
-            step={1000}
-            value={priceRange}
-            onValueChange={onPriceChange}
-            className="w-full"
-          />
-          <div className="flex justify-between text-xs text-muted-foreground">
-            <span>{minPrice.toLocaleString('ru-RU')} ₽</span>
-            <span>{maxPrice.toLocaleString('ru-RU')} ₽</span>
-          </div>
-        </div>
-
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <Label>Мощность</Label>

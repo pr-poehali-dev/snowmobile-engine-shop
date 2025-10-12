@@ -18,7 +18,6 @@ interface CartItem {
 const Index = () => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [activeSection, setActiveSection] = useState('home');
-  const [priceRange, setPriceRange] = useState<[number, number]>([70000, 95000]);
   const [powerRange, setPowerRange] = useState<[number, number]>([24, 30]);
 
   const products = [
@@ -196,21 +195,16 @@ const Index = () => {
     return products.filter(product => {
       const productPower = parseInt(product.power);
       return (
-        product.price >= priceRange[0] &&
-        product.price <= priceRange[1] &&
         productPower >= powerRange[0] &&
         productPower <= powerRange[1]
       );
     });
-  }, [priceRange, powerRange, products]);
+  }, [powerRange, products]);
 
-  const minPrice = Math.min(...products.map(p => p.price));
-  const maxPrice = Math.max(...products.map(p => p.price));
   const minPower = Math.min(...products.map(p => parseInt(p.power)));
   const maxPower = Math.max(...products.map(p => parseInt(p.power)));
 
   const resetFilters = () => {
-    setPriceRange([minPrice, maxPrice]);
     setPowerRange([minPower, maxPower]);
   };
 
@@ -237,13 +231,9 @@ const Index = () => {
 
           <div className="grid lg:grid-cols-[320px_1fr] gap-8">
             <ProductFilters
-              priceRange={priceRange}
               powerRange={powerRange}
-              onPriceChange={setPriceRange}
               onPowerChange={setPowerRange}
               onReset={resetFilters}
-              minPrice={minPrice}
-              maxPrice={maxPrice}
               minPower={minPower}
               maxPower={maxPower}
               resultsCount={filteredProducts.length}
