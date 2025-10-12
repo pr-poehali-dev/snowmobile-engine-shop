@@ -1,0 +1,16 @@
+{
+  "tests": [
+    {
+      "name": "Detect city by IP",
+      "method": "GET",
+      "path": "/",
+      "expectedStatus": 200,
+      "expectedBody": {
+        "city": "string",
+        "country": "string",
+        "ip": "string"
+      },
+      "bodyMatcher": "partial"
+    }
+  ]
+}

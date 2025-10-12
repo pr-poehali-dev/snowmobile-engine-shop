@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Badge } from '@/components/ui/badge';
@@ -45,6 +45,26 @@ const Header = ({
   const [fullName, setFullName] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [openCityPopover, setOpenCityPopover] = useState(false);
+  const [cityDetected, setCityDetected] = useState(false);
+
+  useEffect(() => {
+    const detectCity = async () => {
+      try {
+        const response = await fetch('https://functions.poehali.dev/a68422b0-053a-4ce5-ae24-75cb2e280ea8');
+        const data = await response.json();
+        if (data.city && !city && !cityDetected) {
+          setCity(data.city);
+          setCityDetected(true);
+        }
+      } catch (error) {
+        console.log('City detection failed:', error);
+      }
+    };
+    
+    if (showOrderForm && !cityDetected) {
+      detectCity();
+    }
+  }, [showOrderForm, city, cityDetected]);
 
   const russianCities = [
     'Москва', 'Санкт-Петербург', 'Новосибирск', 'Екатеринбург', 'Казань',
