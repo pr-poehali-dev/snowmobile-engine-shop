@@ -42,7 +42,7 @@ const ProductCard = ({ product, addToCart }: ProductCardProps) => {
           <div className="grid grid-cols-4 gap-2">
             {[1, 2, 3, 4].map(i => (
               <div key={i} className="aspect-square rounded overflow-hidden bg-muted border border-border">
-                <img src={product.image} alt="" className="w-full h-full object-cover opacity-60" />
+                <img src={i === 1 ? 'https://cdn.poehali.dev/files/700d9be4-3169-41d9-825e-811c040aa808.png' : product.image} alt="" className="w-full h-full object-cover opacity-60" />
               </div>
             ))}
           </div>
