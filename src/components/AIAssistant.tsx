@@ -63,7 +63,7 @@ const AIAssistant = () => {
                   <span className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-muted"></span>
                 </div>
                 <div>
-                  <h3 className="font-semibold text-sm">ИИ Консультант</h3>
+                  <h3 className="font-semibold text-sm"> Консультант</h3>
                   <p className="text-xs text-muted-foreground">Онлайн</p>
                 </div>
               </div>
