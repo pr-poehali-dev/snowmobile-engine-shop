@@ -40,13 +40,14 @@ const HeroSection = ({ scrollToSection }: HeroSectionProps) => {
           <div className="relative animate-scale-in mt-8 lg:mt-0">
             <div className="absolute inset-0 bg-primary/20 blur-3xl" />
             <div className="relative w-full rounded-lg overflow-hidden shadow-2xl aspect-video group">
-              <iframe
+              <video
                 key={isMuted ? 'muted' : 'unmuted'}
-                src={`https://www.youtube.com/embed/f7rLajIafYg?autoplay=1&mute=${isMuted ? 1 : 0}&loop=1&playlist=f7rLajIafYg&controls=0&modestbranding=1&rel=0`}
-                className="w-full h-full"
-                allow="autoplay; encrypted-media"
-                allowFullScreen
-                title="Lifan Engine Demo"
+                src="https://disk.yandex.ru/d/YOQwS_OTqeL2vA&raw=1"
+                autoPlay
+                loop
+                muted={isMuted}
+                playsInline
+                className="w-full h-full object-cover"
               />
               <button
                 onClick={toggleMute}
