@@ -1,14 +1,11 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
-import AIAssistant from '@/components/AIAssistant';
+import Layout from '@/components/Layout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import Icon from '@/components/ui/icon';
 
 const Blog = () => {
-  const [isAIOpen, setIsAIOpen] = useState(false);
 
   const articles = [
     {
@@ -75,11 +72,8 @@ const Blog = () => {
     : articles.filter(a => a.category === activeCategory);
 
   return (
-    <div className="min-h-screen flex flex-col bg-background">
-      <Header activeSection="blog" />
-      
-      <main className="flex-1">
-        <section className="py-12 md:py-20">
+    <Layout activeSection="blog">
+      <section className="py-12 md:py-20">
           <div className="container px-4">
             <div className="max-w-6xl mx-auto">
               <div className="text-center mb-8 md:mb-12">
@@ -175,12 +169,8 @@ const Blog = () => {
               </div>
             </div>
           </div>
-        </section>
-      </main>
-
-      <Footer />
-      <AIAssistant isOpen={isAIOpen} onClose={() => setIsAIOpen(false)} />
-    </div>
+      </section>
+    </Layout>
   );
 };
 

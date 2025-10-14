@@ -1,7 +1,4 @@
-import { useState } from 'react';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
-import AIAssistant from '@/components/AIAssistant';
+import Layout from '@/components/Layout';
 import {
   Accordion,
   AccordionContent,
@@ -12,7 +9,6 @@ import { Card, CardContent } from '@/components/ui/card';
 import Icon from '@/components/ui/icon';
 
 const FAQ = () => {
-  const [isAIOpen, setIsAIOpen] = useState(false);
 
   const faqCategories = [
     {
@@ -136,11 +132,8 @@ const FAQ = () => {
   ];
 
   return (
-    <div className="min-h-screen flex flex-col bg-background">
-      <Header activeSection="faq" />
-      
-      <main className="flex-1">
-        <section className="py-12 md:py-20">
+    <Layout activeSection="faq">
+      <section className="py-12 md:py-20">
           <div className="container px-4">
             <div className="max-w-4xl mx-auto">
               <div className="text-center mb-8 md:mb-12">
@@ -208,12 +201,8 @@ const FAQ = () => {
               </div>
             </div>
           </div>
-        </section>
-      </main>
-
-      <Footer />
-      <AIAssistant isOpen={isAIOpen} onClose={() => setIsAIOpen(false)} />
-    </div>
+      </section>
+    </Layout>
   );
 };
 

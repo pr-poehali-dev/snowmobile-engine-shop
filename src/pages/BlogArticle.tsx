@@ -1,8 +1,5 @@
-import { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
-import AIAssistant from '@/components/AIAssistant';
+import Layout from '@/components/Layout';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
@@ -10,7 +7,6 @@ import Icon from '@/components/ui/icon';
 
 const BlogArticle = () => {
   const { id } = useParams();
-  const [isAIOpen, setIsAIOpen] = useState(false);
 
   const article = {
     id: 'ustanovka-lifan-buran',
@@ -225,11 +221,8 @@ const BlogArticle = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-background">
-      <Header activeSection="blog" />
-      
-      <main className="flex-1">
-        <article className="py-12 md:py-20">
+    <Layout activeSection="blog">
+      <article className="py-12 md:py-20">
           <div className="container px-4">
             <div className="max-w-3xl mx-auto">
               <Link 
@@ -379,12 +372,8 @@ const BlogArticle = () => {
               </Card>
             </div>
           </div>
-        </article>
-      </main>
-
-      <Footer />
-      <AIAssistant isOpen={isAIOpen} onClose={() => setIsAIOpen(false)} />
-    </div>
+      </article>
+    </Layout>
   );
 };
 
