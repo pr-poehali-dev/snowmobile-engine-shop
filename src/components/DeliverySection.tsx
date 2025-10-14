@@ -57,10 +57,10 @@ const DeliverySection = () => {
             <CardContent className="space-y-4">
               <div className="flex justify-between items-center">
                 <div>
-                  <div className="font-medium">Москва и МО</div>
+                  <div className="font-medium">Ижевск</div>
                   <div className="text-sm text-muted-foreground">Курьерская служба</div>
                 </div>
-                <div className="font-bold">500 ₽</div>
+                <div className="font-bold">300 ₽</div>
               </div>
               <Separator />
               <div className="flex justify-between items-center">
@@ -74,7 +74,7 @@ const DeliverySection = () => {
               <div className="flex justify-between items-center">
                 <div>
                   <div className="font-medium">Самовывоз</div>
-                  <div className="text-sm text-muted-foreground">г. Москва, склад</div>
+                  <div className="text-sm text-muted-foreground">г. Ижевск, склад</div>
                 </div>
                 <div className="font-bold text-primary">Бесплатно</div>
               </div>

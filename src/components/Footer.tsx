@@ -94,7 +94,7 @@ const Footer = () => {
                   Telegram канал
                 </a>
               </li>
-              <li>г. Москва</li>
+              <li>г. Ижевск</li>
             </ul>
           </div>
         </div>
