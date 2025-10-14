@@ -1,3 +1,4 @@
+import { Helmet } from 'react-helmet-async';
 import Layout from '@/components/Layout';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import {
@@ -134,6 +135,11 @@ const FAQ = () => {
 
   return (
     <Layout activeSection="faq">
+      <Helmet>
+        <title>Частые вопросы о двигателях Lifan | FAQ</title>
+        <meta name="description" content="Ответы на частые вопросы о двигателях Lifan: установка, гарантия, обслуживание, доставка, оплата и запчасти. Полезная информация от экспертов." />
+        <meta name="keywords" content="FAQ lifan, вопросы о двигателях, гарантия lifan, доставка, обслуживание, запчасти" />
+      </Helmet>
       <section className="py-12 md:py-20">
           <div className="container px-4">
             <div className="max-w-4xl mx-auto">

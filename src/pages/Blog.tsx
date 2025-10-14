@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import Layout from '@/components/Layout';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -74,6 +75,11 @@ const Blog = () => {
 
   return (
     <Layout activeSection="blog">
+      <Helmet>
+        <title>Блог о двигателях Lifan для снегоходов | Советы и руководства</title>
+        <meta name="description" content="Полезные статьи об установке, обслуживании и эксплуатации двигателей Lifan на снегоходах. Пошаговые инструкции, советы экспертов и решения проблем." />
+        <meta name="keywords" content="блог lifan, двигатель lifan, снегоход буран, установка двигателя, техническое обслуживание, советы" />
+      </Helmet>
       <section className="py-12 md:py-20">
           <div className="container px-4">
             <div className="max-w-6xl mx-auto">

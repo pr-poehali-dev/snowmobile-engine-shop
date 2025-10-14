@@ -1,4 +1,5 @@
 import { useParams, Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import Layout from '@/components/Layout';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import { Card, CardContent } from '@/components/ui/card';
@@ -223,6 +224,16 @@ const BlogArticle = () => {
 
   return (
     <Layout activeSection="blog">
+      <Helmet>
+        <title>{article.title}</title>
+        <meta name="description" content={article.content.substring(0, 160).replace(/\n/g, ' ').trim() + '...'} />
+        <meta name="keywords" content={`${article.category.toLowerCase()}, lifan, буран, снегоход, двигатель`} />
+        <meta property="og:title" content={article.title} />
+        <meta property="og:description" content={article.content.substring(0, 160).replace(/\n/g, ' ').trim() + '...'} />
+        <meta property="og:image" content={article.image} />
+        <meta property="article:published_time" content={article.date} />
+        <meta property="article:author" content={article.author} />
+      </Helmet>
       <article className="py-12 md:py-20">
           <div className="container px-4">
             <div className="max-w-3xl mx-auto">

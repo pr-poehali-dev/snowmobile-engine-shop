@@ -1,3 +1,4 @@
+import { Helmet } from 'react-helmet-async';
 import Layout from '@/components/Layout';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import { Tabs } from '@/components/ui/tabs';
@@ -8,6 +9,11 @@ import CatalogTabContent from '@/components/catalog/CatalogTabContent';
 const Catalog = () => {
   return (
     <Layout activeSection="catalog">
+      <Helmet>
+        <title>Каталог двигателей Lifan и запчастей для снегоходов</title>
+        <meta name="description" content="Полный каталог двигателей Lifan 27-35 л.с., запчастей, аксессуаров и услуг по установке для снегоходов Буран, Тайга, Рысь. Купить с доставкой." />
+        <meta name="keywords" content="каталог lifan, двигатели lifan, запчасти снегоход, купить двигатель, lifan 27 30 35, буран" />
+      </Helmet>
       <section className="py-12 md:py-20">
         <div className="container px-4">
           <div className="max-w-6xl mx-auto">
