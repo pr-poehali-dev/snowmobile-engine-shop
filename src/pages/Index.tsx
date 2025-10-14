@@ -105,7 +105,7 @@ const Index = () => {
           { label: 'Гарантия', value: '6 месяцев' },
         ],
       },
-      compatibility: ['Буран', 'Тайга', 'Рысь', 'Ямаха', 'BRP'],
+      compatibility: ['Буран', 'Тайга', 'Рысь', 'Yamaha', 'BRP'],
       complectation: [
         'Двигатель с электростартером',
         'Патрубки для глушителя',
@@ -143,7 +143,7 @@ const Index = () => {
           { label: 'Гарантия', value: '14 дней на проверку' },
         ],
       },
-      compatibility: ['Буран', 'Тайга (с доработками)', 'Рысь', 'Ямаха', 'BRP', 'Polaris старых годов'],
+      compatibility: ['Буран', 'Тайга (с доработками)', 'Рысь', 'Yamaha', 'BRP', 'Polaris старых годов'],
       complectation: [
         'Двигатель Lifan 27 л.с. (подготовленный)',
         'Вариатор Сафари (установлен)',
@@ -211,7 +211,7 @@ const Index = () => {
           { label: 'Гарантия', value: '14 дней на проверку' },
         ],
       },
-      compatibility: ['Буран', 'Тайга', 'Рысь', 'Ямаха', 'BRP'],
+      compatibility: ['Буран', 'Тайга', 'Рысь', 'Yamaha', 'BRP'],
       complectation: [
         'Двигатель Arctica с электростартером',
         'Усиленная защита от мороза',
@@ -249,7 +249,7 @@ const Index = () => {
           { label: 'Гарантия', value: '2 года' },
         ],
       },
-      compatibility: ['Буран', 'Тайга (с доработками)', 'Рысь', 'Ямаха', 'BRP старых годов'],
+      compatibility: ['Буран', 'Тайга (с доработками)', 'Рысь', 'Yamaha', 'BRP старых годов'],
       complectation: [
         'Двигатель Lifan 31 л.с. инжектор в сборе',
         'Вариатор Сафари (установлен)',
@@ -341,7 +341,7 @@ const Index = () => {
         <div className="container px-4">
           <div className="text-center mb-8 md:mb-12">
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-3 md:mb-4" itemProp="name">Каталог двигателей Lifan для снегоходов</h2>
-            <p className="text-base md:text-lg lg:text-xl text-muted-foreground" itemProp="description">Мощные двигатели от 27 до 31 л.с. для Буран, Тайга, Рысь, Ямаха, BRP. С инжектором и электростартером.</p>
+            <p className="text-base md:text-lg lg:text-xl text-muted-foreground" itemProp="description">Мощные двигатели от 27 до 31 л.с. для Буран, Тайга, Рысь, Yamaha, BRP. С инжектором и электростартером.</p>
           </div>
 
           <div className="space-y-8 md:space-y-12">

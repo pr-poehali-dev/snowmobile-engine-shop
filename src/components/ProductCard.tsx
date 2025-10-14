@@ -99,7 +99,7 @@ const ProductCard = ({ product, addToCart }: ProductCardProps) => {
           <div>
             <Badge className="mb-2 bg-primary text-primary-foreground text-xs">В наличии</Badge>
             <h3 className="text-2xl md:text-3xl font-bold mb-2" itemProp="name">{product.name}</h3>
-            <p className="text-sm md:text-base text-muted-foreground" itemProp="description">Профессиональный двигатель для снегоходов Буран, Тайга, Рысь, Ямаха, BRP</p>
+            <p className="text-sm md:text-base text-muted-foreground" itemProp="description">Профессиональный двигатель для снегоходов Буран, Тайга, Рысь, Yamaha, BRP</p>
           </div>
 
           <div className="flex items-baseline gap-4" itemProp="offers" itemScope itemType="https://schema.org/Offer">
