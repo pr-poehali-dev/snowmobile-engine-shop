@@ -133,12 +133,30 @@ const FAQ = () => {
     }
   ];
 
+  const faqSchemaData = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faqCategories.flatMap(category => 
+      category.questions.map(qa => ({
+        "@type": "Question",
+        "name": qa.q,
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": qa.a
+        }
+      }))
+    )
+  };
+
   return (
     <Layout activeSection="faq">
       <Helmet>
         <title>Частые вопросы о двигателях Lifan | FAQ</title>
         <meta name="description" content="Ответы на частые вопросы о двигателях Lifan: установка, гарантия, обслуживание, доставка, оплата и запчасти. Полезная информация от экспертов." />
         <meta name="keywords" content="FAQ lifan, вопросы о двигателях, гарантия lifan, доставка, обслуживание, запчасти" />
+        <script type="application/ld+json">
+          {JSON.stringify(faqSchemaData)}
+        </script>
       </Helmet>
       <section className="py-12 md:py-20">
           <div className="container px-4">
