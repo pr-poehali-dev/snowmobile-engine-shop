@@ -41,7 +41,17 @@ const Footer = () => {
             <h4 className="font-bold mb-3 md:mb-4 text-sm md:text-base">Контакты</h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li>+7 (XXX) XXX-XX-XX</li>
-              <li>info@motodvni.ru</li>
+              <li>
+                <a 
+                  href="https://t.me/lifanburan" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="hover:text-primary transition-colors inline-flex items-center gap-1"
+                >
+                  <Icon name="Send" size={14} />
+                  Telegram канал
+                </a>
+              </li>
               <li>г. Москва</li>
             </ul>
           </div>
