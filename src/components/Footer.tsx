@@ -11,7 +11,7 @@ const Footer = () => {
               <div className="w-8 h-8 md:w-10 md:h-10 bg-primary flex items-center justify-center rounded">
                 <Icon name="Zap" className="text-primary-foreground" size={20} />
               </div>
-              <span className="text-lg md:text-xl font-bold">МОТОДВНИ</span>
+              <span className="text-lg md:text-xl font-bold">МОТОДВИЖ</span>
             </div>
             <p className="text-sm text-muted-foreground">
               Профессиональные двигатели для снегоходов и мототехники
