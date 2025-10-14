@@ -48,7 +48,7 @@ const Layout = ({
 
       <Footer />
       <ScrollToTop />
-      <AIAssistant isOpen={isAIOpen} onClose={() => setIsAIOpen(false)} />
+      <AIAssistant isOpen={isAIOpen} setIsOpen={setIsAIOpen} />
     </div>
   );
 };
