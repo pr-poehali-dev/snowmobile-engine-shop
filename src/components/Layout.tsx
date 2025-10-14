@@ -2,6 +2,7 @@ import { ReactNode, useState } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import AIAssistant from '@/components/AIAssistant';
+import ScrollToTop from '@/components/ScrollToTop';
 
 interface LayoutProps {
   children: ReactNode;
@@ -46,6 +47,7 @@ const Layout = ({
       </main>
 
       <Footer />
+      <ScrollToTop />
       <AIAssistant isOpen={isAIOpen} onClose={() => setIsAIOpen(false)} />
     </div>
   );
