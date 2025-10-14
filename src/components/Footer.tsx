@@ -40,7 +40,15 @@ const Footer = () => {
           <div>
             <h4 className="font-bold mb-3 md:mb-4 text-sm md:text-base">Контакты</h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
-              <li>+7 (XXX) XXX-XX-XX</li>
+              <li>
+                <a 
+                  href="tel:+79828202197" 
+                  className="hover:text-primary transition-colors inline-flex items-center gap-1"
+                >
+                  <Icon name="Phone" size={14} />
+                  +7 (982) 820-21-97
+                </a>
+              </li>
               <li>
                 <a 
                   href="https://t.me/lifanburan" 
