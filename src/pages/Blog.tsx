@@ -73,12 +73,39 @@ const Blog = () => {
     ? articles 
     : articles.filter(a => a.category === activeCategory);
 
+  const schemaBlogData = {
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    "name": "Блог МОТОДВИЖ",
+    "description": "Полезные статьи об установке, обслуживании и эксплуатации двигателей Lifan на снегоходах",
+    "url": "https://preview--snowmobile-engine-shop.poehali.dev/blog",
+    "publisher": {
+      "@type": "Organization",
+      "name": "МОТОДВИЖ",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://preview--snowmobile-engine-shop.poehali.dev/logo.png"
+      }
+    },
+    "blogPost": articles.map(article => ({
+      "@type": "BlogPosting",
+      "headline": article.title,
+      "description": article.excerpt,
+      "image": article.image,
+      "datePublished": "2025-01-15T09:00:00+03:00",
+      "url": `https://preview--snowmobile-engine-shop.poehali.dev/blog/${article.id}`
+    }))
+  };
+
   return (
     <Layout activeSection="blog">
       <Helmet>
         <title>Блог о двигателях Lifan для снегоходов | Советы и руководства</title>
         <meta name="description" content="Полезные статьи об установке, обслуживании и эксплуатации двигателей Lifan на снегоходах. Пошаговые инструкции, советы экспертов и решения проблем." />
         <meta name="keywords" content="блог lifan, двигатель lifan, снегоход буран, установка двигателя, техническое обслуживание, советы" />
+        <script type="application/ld+json">
+          {JSON.stringify(schemaBlogData)}
+        </script>
       </Helmet>
       <section className="py-12 md:py-20">
           <div className="container px-4">

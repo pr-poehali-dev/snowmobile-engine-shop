@@ -222,6 +222,33 @@ const BlogArticle = () => {
     `
   };
 
+  const schemaData = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": article.title,
+    "image": article.image,
+    "datePublished": "2025-01-15T09:00:00+03:00",
+    "dateModified": "2025-01-15T09:00:00+03:00",
+    "author": {
+      "@type": "Person",
+      "name": article.author
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "МОТОДВИЖ",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://preview--snowmobile-engine-shop.poehali.dev/logo.png"
+      }
+    },
+    "description": article.content.substring(0, 160).replace(/\n/g, ' ').trim(),
+    "articleBody": article.content,
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": `https://preview--snowmobile-engine-shop.poehali.dev/blog/${article.id}`
+    }
+  };
+
   return (
     <Layout activeSection="blog">
       <Helmet>
@@ -233,6 +260,9 @@ const BlogArticle = () => {
         <meta property="og:image" content={article.image} />
         <meta property="article:published_time" content={article.date} />
         <meta property="article:author" content={article.author} />
+        <script type="application/ld+json">
+          {JSON.stringify(schemaData)}
+        </script>
       </Helmet>
       <article className="py-12 md:py-20">
           <div className="container px-4">
