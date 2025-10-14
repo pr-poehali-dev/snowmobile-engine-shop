@@ -144,12 +144,12 @@ const Header = ({
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-14 md:h-16 items-center justify-between px-4">
-        <div className="flex items-center gap-1.5 md:gap-2">
+        <Link to="/" className="flex items-center gap-1.5 md:gap-2 hover:opacity-80 transition-opacity">
           <div className="w-8 h-8 md:w-10 md:h-10 bg-primary flex items-center justify-center rounded">
             <Icon name="Zap" className="text-primary-foreground" size={20} />
           </div>
           <span className="text-base md:text-xl font-bold tracking-tight">МОТОДВИЖ</span>
-        </div>
+        </Link>
 
         <Sheet>
           <SheetTrigger asChild>
