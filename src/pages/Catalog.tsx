@@ -1,4 +1,5 @@
 import Layout from '@/components/Layout';
+import Breadcrumbs from '@/components/Breadcrumbs';
 import { Tabs } from '@/components/ui/tabs';
 import { categories } from '@/components/catalog/CatalogData';
 import CatalogTabsList from '@/components/catalog/CatalogTabsList';
@@ -10,6 +11,8 @@ const Catalog = () => {
       <section className="py-12 md:py-20">
         <div className="container px-4">
           <div className="max-w-6xl mx-auto">
+            <Breadcrumbs items={[{ label: 'Каталог' }]} />
+            
             <div className="text-center mb-8 md:mb-12">
               <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-3 md:mb-4">
                 Каталог продукции

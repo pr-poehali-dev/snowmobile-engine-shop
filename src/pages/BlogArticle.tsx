@@ -1,5 +1,6 @@
 import { useParams, Link } from 'react-router-dom';
 import Layout from '@/components/Layout';
+import Breadcrumbs from '@/components/Breadcrumbs';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
@@ -225,13 +226,10 @@ const BlogArticle = () => {
       <article className="py-12 md:py-20">
           <div className="container px-4">
             <div className="max-w-3xl mx-auto">
-              <Link 
-                to="/blog"
-                className="inline-flex items-center gap-2 text-primary hover:text-primary/80 mb-6 transition-colors"
-              >
-                <Icon name="ArrowLeft" size={18} />
-                Вернуться к статьям
-              </Link>
+              <Breadcrumbs items={[
+                { label: 'Блог', href: '/blog' },
+                { label: article.title }
+              ]} />
 
               <div className="mb-6">
                 <Badge variant="secondary" className="mb-4">{article.category}</Badge>
