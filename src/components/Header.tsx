@@ -198,7 +198,7 @@ const Header = ({
                 href="https://t.me/lifanburan" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 text-left text-base font-medium text-muted-foreground hover:text-primary transition-colors"
+                className="flex items-center gap-2 text-left text-base font-medium text-[#0088cc] hover:text-[#0077b5] transition-colors"
               >
                 <Icon name="Send" size={18} />
                 Telegram канал
@@ -244,10 +244,9 @@ const Header = ({
 
         <div className="flex items-center gap-2">
           <Button
-            variant="outline"
             size="sm"
             asChild
-            className="hidden md:flex items-center gap-2"
+            className="hidden md:flex items-center gap-2 bg-[#0088cc] hover:bg-[#0077b5] text-white"
           >
             <a 
               href="https://t.me/lifanburan" 

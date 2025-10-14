@@ -46,7 +46,7 @@ const Footer = () => {
                   href="https://t.me/lifanburan" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="hover:text-primary transition-colors inline-flex items-center gap-1"
+                  className="text-[#0088cc] hover:text-[#0077b5] transition-colors inline-flex items-center gap-1"
                 >
                   <Icon name="Send" size={14} />
                   Telegram канал
