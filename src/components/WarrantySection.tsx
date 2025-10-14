@@ -76,23 +76,28 @@ const WarrantySection = ({ openAI }: WarrantySectionProps) => {
               <CardDescription>Мы всегда на связи для решения ваших вопросов</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="flex items-start gap-4">
+              <a href="tel:+79828202197" className="flex items-start gap-4 hover:bg-muted/50 p-2 -m-2 rounded-lg transition-colors">
                 <Icon name="Phone" className="text-primary mt-1" size={20} />
                 <div>
                   <div className="font-medium">Телефон</div>
-                  <div className="text-muted-foreground">+7 (XXX) XXX-XX-XX</div>
+                  <div className="text-muted-foreground">+7 (982) 820-21-97</div>
                   <div className="text-sm text-muted-foreground">Пн-Пт: 9:00 - 18:00 МСК</div>
                 </div>
-              </div>
+              </a>
               <Separator />
-              <div className="flex items-start gap-4">
-                <Icon name="Mail" className="text-primary mt-1" size={20} />
+              <a 
+                href="https://t.me/lifanburan" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="flex items-start gap-4 hover:bg-muted/50 p-2 -m-2 rounded-lg transition-colors"
+              >
+                <Icon name="Send" className="text-[#0088cc] mt-1" size={20} />
                 <div>
-                  <div className="font-medium">Email</div>
-                  <div className="text-muted-foreground">info@motodvni.ru</div>
-                  <div className="text-sm text-muted-foreground">Ответим в течение 24 часов</div>
+                  <div className="font-medium">Telegram канал</div>
+                  <div className="text-[#0088cc]">@lifanburan</div>
+                  <div className="text-sm text-muted-foreground">Новости, обзоры и поддержка</div>
                 </div>
-              </div>
+              </a>
               <Separator />
               <button 
                 onClick={openAI}
