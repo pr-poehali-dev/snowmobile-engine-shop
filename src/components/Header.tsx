@@ -193,6 +193,16 @@ const Header = ({
               >
                 Гарантия
               </button>
+              <Separator />
+              <a 
+                href="https://t.me/lifanburan" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-left text-base font-medium text-muted-foreground hover:text-primary transition-colors"
+              >
+                <Icon name="Send" size={18} />
+                Telegram канал
+              </a>
             </nav>
           </SheetContent>
         </Sheet>
@@ -232,7 +242,24 @@ const Header = ({
           </button>
         </nav>
 
-        <Sheet>
+        <div className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            asChild
+            className="hidden md:flex items-center gap-2"
+          >
+            <a 
+              href="https://t.me/lifanburan" 
+              target="_blank" 
+              rel="noopener noreferrer"
+            >
+              <Icon name="Send" size={16} />
+              Telegram
+            </a>
+          </Button>
+
+          <Sheet>
           <SheetTrigger asChild>
             <Button variant="outline" size="icon" className="relative">
               <Icon name="ShoppingCart" size={20} />
