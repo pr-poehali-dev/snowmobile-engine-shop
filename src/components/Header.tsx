@@ -19,25 +19,25 @@ interface CartItem {
 }
 
 interface HeaderProps {
-  activeSection: string;
-  scrollToSection: (section: string) => void;
-  cartItems: CartItem[];
-  updateQuantity: (id: string, quantity: number) => void;
-  removeFromCart: (id: string) => void;
-  clearCart: () => void;
-  totalPrice: number;
-  totalItems: number;
+  activeSection?: string;
+  scrollToSection?: (section: string) => void;
+  cartItems?: CartItem[];
+  updateQuantity?: (id: string, quantity: number) => void;
+  removeFromCart?: (id: string) => void;
+  clearCart?: () => void;
+  totalPrice?: number;
+  totalItems?: number;
 }
 
 const Header = ({
-  activeSection,
-  scrollToSection,
-  cartItems,
-  updateQuantity,
-  removeFromCart,
-  clearCart,
-  totalPrice,
-  totalItems,
+  activeSection = '',
+  scrollToSection = () => {},
+  cartItems = [],
+  updateQuantity = () => {},
+  removeFromCart = () => {},
+  clearCart = () => {},
+  totalPrice = 0,
+  totalItems = 0,
 }: HeaderProps) => {
   const [showOrderForm, setShowOrderForm] = useState(false);
   const [phone, setPhone] = useState('');
