@@ -260,7 +260,7 @@ const Header = ({
           </Button>
 
           <Sheet>
-          <SheetTrigger asChild>
+            <SheetTrigger asChild>
             <Button variant="outline" size="icon" className="relative">
               <Icon name="ShoppingCart" size={20} />
               {totalItems > 0 && (
@@ -448,7 +448,8 @@ const Header = ({
               )}
             </div>
           </SheetContent>
-        </Sheet>
+          </Sheet>
+        </div>
       </div>
     </header>
   );
