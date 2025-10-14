@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Badge } from '@/components/ui/badge';
@@ -161,38 +162,38 @@ const Header = ({
               <SheetTitle>Меню</SheetTitle>
             </SheetHeader>
             <nav className="flex flex-col gap-4 mt-8">
-              <button
-                onClick={() => scrollToSection('home')}
+              <Link
+                to="/"
                 className={`text-left text-base font-medium transition-colors hover:text-primary ${
                   activeSection === 'home' ? 'text-primary' : 'text-muted-foreground'
                 }`}
               >
                 Главная
-              </button>
-              <button
-                onClick={() => scrollToSection('catalog')}
+              </Link>
+              <Link
+                to="/catalog"
                 className={`text-left text-base font-medium transition-colors hover:text-primary ${
                   activeSection === 'catalog' ? 'text-primary' : 'text-muted-foreground'
                 }`}
               >
                 Каталог
-              </button>
-              <button
-                onClick={() => scrollToSection('delivery')}
+              </Link>
+              <Link
+                to="/blog"
                 className={`text-left text-base font-medium transition-colors hover:text-primary ${
-                  activeSection === 'delivery' ? 'text-primary' : 'text-muted-foreground'
+                  activeSection === 'blog' ? 'text-primary' : 'text-muted-foreground'
                 }`}
               >
-                Доставка
-              </button>
-              <button
-                onClick={() => scrollToSection('warranty')}
+                Блог
+              </Link>
+              <Link
+                to="/faq"
                 className={`text-left text-base font-medium transition-colors hover:text-primary ${
-                  activeSection === 'warranty' ? 'text-primary' : 'text-muted-foreground'
+                  activeSection === 'faq' ? 'text-primary' : 'text-muted-foreground'
                 }`}
               >
-                Гарантия
-              </button>
+                Вопросы и ответы
+              </Link>
               <Separator />
               <a 
                 href="https://t.me/lifanburan" 
@@ -208,38 +209,38 @@ const Header = ({
         </Sheet>
 
         <nav className="hidden md:flex items-center gap-8">
-          <button
-            onClick={() => scrollToSection('home')}
+          <Link
+            to="/"
             className={`text-sm font-medium transition-colors hover:text-primary ${
               activeSection === 'home' ? 'text-primary' : 'text-muted-foreground'
             }`}
           >
             Главная
-          </button>
-          <button
-            onClick={() => scrollToSection('catalog')}
+          </Link>
+          <Link
+            to="/catalog"
             className={`text-sm font-medium transition-colors hover:text-primary ${
               activeSection === 'catalog' ? 'text-primary' : 'text-muted-foreground'
             }`}
           >
             Каталог
-          </button>
-          <button
-            onClick={() => scrollToSection('delivery')}
+          </Link>
+          <Link
+            to="/blog"
             className={`text-sm font-medium transition-colors hover:text-primary ${
-              activeSection === 'delivery' ? 'text-primary' : 'text-muted-foreground'
+              activeSection === 'blog' ? 'text-primary' : 'text-muted-foreground'
             }`}
           >
-            Доставка
-          </button>
-          <button
-            onClick={() => scrollToSection('warranty')}
+            Блог
+          </Link>
+          <Link
+            to="/faq"
             className={`text-sm font-medium transition-colors hover:text-primary ${
-              activeSection === 'warranty' ? 'text-primary' : 'text-muted-foreground'
+              activeSection === 'faq' ? 'text-primary' : 'text-muted-foreground'
             }`}
           >
-            Гарантия
-          </button>
+            FAQ
+          </Link>
         </nav>
 
         <div className="flex items-center gap-2">
