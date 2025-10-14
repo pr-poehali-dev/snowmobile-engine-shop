@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { Separator } from '@/components/ui/separator';
 import Icon from '@/components/ui/icon';
 
@@ -21,19 +22,52 @@ const Footer = () => {
           <div>
             <h4 className="font-bold mb-3 md:mb-4 text-sm md:text-base">Каталог</h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
-              <li>Двигатели Lifan</li>
-              <li>Запчасти</li>
-              <li>Аксессуары</li>
+              <li>
+                <Link to="/catalog" className="hover:text-primary transition-colors">
+                  Полный каталог
+                </Link>
+              </li>
+              <li>
+                <Link to="/catalog" className="hover:text-primary transition-colors">
+                  Двигатели Lifan
+                </Link>
+              </li>
+              <li>
+                <Link to="/catalog" className="hover:text-primary transition-colors">
+                  Запчасти
+                </Link>
+              </li>
+              <li>
+                <Link to="/catalog" className="hover:text-primary transition-colors">
+                  Аксессуары
+                </Link>
+              </li>
             </ul>
           </div>
 
           <div>
             <h4 className="font-bold mb-3 md:mb-4 text-sm md:text-base">Информация</h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
-              <li>О компании</li>
-              <li>Доставка и оплата</li>
-              <li>Гарантия</li>
-              <li>Контакты</li>
+              <li>
+                <Link to="/faq" className="hover:text-primary transition-colors">
+                  Частые вопросы
+                </Link>
+              </li>
+              <li>
+                <Link to="/blog" className="hover:text-primary transition-colors">
+                  Блог и статьи
+                </Link>
+              </li>
+              <li>
+                <Link to="/" className="hover:text-primary transition-colors">
+                  Доставка и оплата
+                </Link>
+              </li>
+              <li>
+                <Link to="/" className="hover:text-primary transition-colors">
+                  Гарантия
+                </Link>
+              </li>
             </ul>
           </div>
 
