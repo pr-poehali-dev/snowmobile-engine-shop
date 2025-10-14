@@ -147,7 +147,7 @@ const Header = ({
           <div className="w-8 h-8 md:w-10 md:h-10 bg-primary flex items-center justify-center rounded">
             <Icon name="Zap" className="text-primary-foreground" size={20} />
           </div>
-          <span className="text-base md:text-xl font-bold tracking-tight">МОТОДВНИ</span>
+          <span className="text-base md:text-xl font-bold tracking-tight">МОТОДВИЖ</span>
         </div>
 
         <Sheet>
