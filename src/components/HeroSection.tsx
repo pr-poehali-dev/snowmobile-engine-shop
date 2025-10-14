@@ -51,9 +51,7 @@ const HeroSection = ({ scrollToSection }: HeroSectionProps) => {
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight leading-tight" itemProp="name">
               Двигатели Lifan для снегоходов Буран, Тайга, Рысь
             </h1>
-            <p className="text-base md:text-lg lg:text-xl text-muted-foreground leading-relaxed" itemProp="description">
-              Мощные и надёжные двигатели Lifan от 27 до 31 л.с. для снегоходов Буран, Тайга, Рысь, Ямаха, BRP. Инжектор, электростартер, гарантия до 2 лет. Полная комплектация с вариатором Сафари.
-            </p>
+            <p className="text-base md:text-lg lg:text-xl text-muted-foreground leading-relaxed" itemProp="description">Мощные и надёжные двигатели Lifan от 27 до 31 л.с. для снегоходов Буран, Тайга, Рысь, Yamaha, BRP. Инжектор, электростартер, гарантия до 2 лет. Полная комплектация с вариатором Сафари.</p>
             <div className="flex flex-col sm:flex-row gap-3 md:gap-4">
               <Button size="lg" onClick={() => scrollToSection('catalog')} className="w-full sm:w-auto">
                 <Icon name="Zap" className="mr-2" size={20} />
