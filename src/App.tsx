@@ -13,6 +13,9 @@ import FAQ from "./pages/FAQ";
 import Blog from "./pages/Blog";
 import BlogArticle from "./pages/BlogArticle";
 import Catalog from "./pages/Catalog";
+import BuranDvigatel from "./pages/BuranDvigatel";
+import LifanDvigateli from "./pages/LifanDvigateli";
+import UslugiUstanovka from "./pages/UslugiUstanovka";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -30,6 +33,9 @@ const App = () => (
           <Route path="/blog" element={<Blog />} />
           <Route path="/blog/:id" element={<BlogArticle />} />
           <Route path="/catalog" element={<Catalog />} />
+          <Route path="/buran/dvigatel" element={<BuranDvigatel />} />
+          <Route path="/lifan/dvigateli-dlya-snegohodov" element={<LifanDvigateli />} />
+          <Route path="/uslugi/ustanovka-dvigatelya-buran" element={<UslugiUstanovka />} />
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/admin/users" element={<AdminUsers />} />
