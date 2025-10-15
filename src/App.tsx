@@ -14,8 +14,15 @@ import Blog from "./pages/Blog";
 import BlogArticle from "./pages/BlogArticle";
 import Catalog from "./pages/Catalog";
 import BuranDvigatel from "./pages/BuranDvigatel";
+import BuranLifan from "./pages/BuranLifan";
+import BuranLoncin from "./pages/BuranLoncin";
+import TaigaDvigatel from "./pages/TaigaDvigatel";
+import RysDvigatel from "./pages/RysDvigatel";
+import BuranReversReduktor from "./pages/BuranReversReduktor";
 import LifanDvigateli from "./pages/LifanDvigateli";
 import UslugiUstanovka from "./pages/UslugiUstanovka";
+import UslugiUstanovkaLifan from "./pages/UslugiUstanovkaLifan";
+import UslugiUstanovkaLoncin from "./pages/UslugiUstanovkaLoncin";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -34,8 +41,15 @@ const App = () => (
           <Route path="/blog/:id" element={<BlogArticle />} />
           <Route path="/catalog" element={<Catalog />} />
           <Route path="/buran/dvigatel" element={<BuranDvigatel />} />
+          <Route path="/buran/dvigatel-lifan" element={<BuranLifan />} />
+          <Route path="/buran/dvigatel-loncin" element={<BuranLoncin />} />
+          <Route path="/buran/revers-reduktor" element={<BuranReversReduktor />} />
+          <Route path="/taiga/dvigatel" element={<TaigaDvigatel />} />
+          <Route path="/rys/dvigatel" element={<RysDvigatel />} />
           <Route path="/lifan/dvigateli-dlya-snegohodov" element={<LifanDvigateli />} />
           <Route path="/uslugi/ustanovka-dvigatelya-buran" element={<UslugiUstanovka />} />
+          <Route path="/uslugi/ustanovka-lifan-buran" element={<UslugiUstanovkaLifan />} />
+          <Route path="/uslugi/ustanovka-loncin-buran" element={<UslugiUstanovkaLoncin />} />
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/admin/users" element={<AdminUsers />} />
