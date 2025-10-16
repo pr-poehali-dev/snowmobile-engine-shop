@@ -11,9 +11,9 @@ const SECRET_KEY = 'create-admin-2024';
 const CreateAdmin = () => {
   const [accessKey, setAccessKey] = useState('');
   const [isAuthorized, setIsAuthorized] = useState(false);
-  const [email, setEmail] = useState('admin@crm.local');
-  const [password, setPassword] = useState('Admin2024!');
-  const [fullName, setFullName] = useState('Администратор CRM');
+  const [email, setEmail] = useState('boss@snowmobile.ru');
+  const [password, setPassword] = useState('Boss2024!');
+  const [fullName, setFullName] = useState('Главный Босс');
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<any>(null);
   const [error, setError] = useState('');
