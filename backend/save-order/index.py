@@ -69,9 +69,15 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         conn = psycopg2.connect(database_url)
         cur = conn.cursor()
         
+        products_json = json.dumps(items)
+        
         insert_query = """
-            INSERT INTO orders (order_number, full_name, phone, city, address, total_price, total_items, order_items)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+            INSERT INTO orders (
+                order_number, full_name, phone, city, address, 
+                total_price, total_items, order_items,
+                status, payment_status, shipping_status, created_at
+            )
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, NOW())
             RETURNING id
         """
         
@@ -83,7 +89,10 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             address,
             total_price,
             total_items,
-            Json(items)
+            products_json,
+            'new',
+            'pending',
+            'pending'
         ))
         
         order_id = cur.fetchone()[0]

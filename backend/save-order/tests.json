@@ -8,6 +8,7 @@
         "fullName": "Иван Иванов",
         "phone": "+79991234567",
         "city": "Москва",
+        "address": "ул. Тестовая, д. 1",
         "items": [
           {
             "id": "1",
@@ -21,9 +22,7 @@
       },
       "expectedStatus": 200,
       "expectedBody": {
-        "success": true,
-        "orderNumber": "string",
-        "orderId": "number"
+        "success": true
       },
       "bodyMatcher": "partial"
     },

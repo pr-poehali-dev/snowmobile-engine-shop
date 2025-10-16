@@ -49,9 +49,13 @@ const OrderDetailModal = ({ order, isOpen, onClose, onUpdate }: OrderDetailModal
   const handleSave = async () => {
     setSaving(true);
     try {
+      const token = localStorage.getItem('crm_token');
       const response = await fetch('https://functions.poehali.dev/67bde94f-bf30-4efd-ab58-f1351096f50c', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'X-Session-Token': token || ''
+        },
         body: JSON.stringify({
           action: 'update_order',
           order_id: order.id,

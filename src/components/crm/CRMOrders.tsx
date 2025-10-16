@@ -37,7 +37,12 @@ const CRMOrders = () => {
 
   const fetchOrders = async () => {
     try {
-      const response = await fetch('https://functions.poehali.dev/67bde94f-bf30-4efd-ab58-f1351096f50c');
+      const token = localStorage.getItem('crm_token');
+      const response = await fetch('https://functions.poehali.dev/67bde94f-bf30-4efd-ab58-f1351096f50c', {
+        headers: {
+          'X-Session-Token': token || ''
+        }
+      });
       const data = await response.json();
       
       if (data.success) {

@@ -113,9 +113,9 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         total_count = cur.fetchone()[0]
         
         query = f"""
-            SELECT id, order_number, full_name, phone, city, 
+            SELECT id, order_number, full_name, phone, city, address,
                    total_price, total_items, order_items, 
-                   created_at, status
+                   created_at, status, payment_status, shipping_status, notes
             FROM orders
             WHERE {where_sql}
             ORDER BY created_at DESC
@@ -127,17 +127,26 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         
         orders = []
         for row in cur.fetchall():
+            products_data = row[8]
+            if isinstance(products_data, str):
+                try:
+                    products_data = json.loads(products_data)
+                except:
+                    products_data = []
+            
             orders.append({
                 'id': row[0],
-                'orderNumber': row[1],
-                'fullName': row[2],
-                'phone': row[3],
-                'city': row[4],
-                'totalPrice': float(row[5]),
-                'totalItems': row[6],
-                'items': row[7],
-                'createdAt': row[8].isoformat() if row[8] else None,
-                'status': row[9]
+                'customer_name': row[2],
+                'customer_phone': row[3],
+                'customer_city': row[4],
+                'customer_address': row[5],
+                'total': float(row[6]),
+                'products': json.dumps(products_data) if isinstance(products_data, list) else products_data,
+                'created_at': row[9].isoformat() if row[9] else None,
+                'status': row[10] or 'new',
+                'payment_status': row[11] or 'pending',
+                'shipping_status': row[12] or 'pending',
+                'notes': row[13] or ''
             })
         
         cur.close()
@@ -196,7 +205,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             cur = conn.cursor()
             
             cur.execute(
-                "UPDATE orders SET status = %s, payment_status = %s, shipping_status = %s, notes = %s, updated_at = NOW() WHERE id = %s",
+                "UPDATE orders SET status = %s, payment_status = %s, shipping_status = %s, notes = %s WHERE id = %s",
                 (status, payment_status, shipping_status, notes, order_id)
             )
             conn.commit()
