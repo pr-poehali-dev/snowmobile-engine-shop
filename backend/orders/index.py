@@ -49,7 +49,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             'statusCode': 200,
             'headers': {
                 'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Methods': 'GET, PUT, OPTIONS',
+                'Access-Control-Allow-Methods': 'GET, POST, PUT, OPTIONS',
                 'Access-Control-Allow-Headers': 'Content-Type, X-Session-Token',
                 'Access-Control-Max-Age': '86400'
             },
@@ -158,6 +158,61 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             }),
             'isBase64Encoded': False
         }
+    
+    if method == 'POST':
+        body_data = json.loads(event.get('body', '{}'))
+        action = body_data.get('action')
+        
+        if action == 'update_order':
+            if user['role'] != 'admin':
+                return {
+                    'statusCode': 403,
+                    'headers': {
+                        'Content-Type': 'application/json',
+                        'Access-Control-Allow-Origin': '*'
+                    },
+                    'body': json.dumps({'success': False, 'error': 'Недостаточно прав'}),
+                    'isBase64Encoded': False
+                }
+            
+            order_id = body_data.get('order_id')
+            status = body_data.get('status')
+            payment_status = body_data.get('payment_status')
+            shipping_status = body_data.get('shipping_status')
+            notes = body_data.get('notes', '')
+            
+            if not order_id:
+                return {
+                    'statusCode': 400,
+                    'headers': {
+                        'Content-Type': 'application/json',
+                        'Access-Control-Allow-Origin': '*'
+                    },
+                    'body': json.dumps({'success': False, 'error': 'order_id обязателен'}),
+                    'isBase64Encoded': False
+                }
+            
+            conn = get_db_connection()
+            cur = conn.cursor()
+            
+            cur.execute(
+                "UPDATE orders SET status = %s, payment_status = %s, shipping_status = %s, notes = %s, updated_at = NOW() WHERE id = %s",
+                (status, payment_status, shipping_status, notes, order_id)
+            )
+            conn.commit()
+            
+            cur.close()
+            conn.close()
+            
+            return {
+                'statusCode': 200,
+                'headers': {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*'
+                },
+                'body': json.dumps({'success': True, 'message': 'Заказ обновлён'}),
+                'isBase64Encoded': False
+            }
     
     if method == 'PUT':
         if user['role'] != 'admin':

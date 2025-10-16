@@ -5,15 +5,20 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import Icon from '@/components/ui/icon';
+import OrderDetailModal from './OrderDetailModal';
 
 interface Order {
   id: number;
   customer_name: string;
   customer_phone: string;
+  customer_city?: string;
+  customer_address?: string;
   products: string;
   total: number;
   status: string;
   payment_status: string;
+  shipping_status?: string;
+  notes?: string;
   created_at: string;
 }
 
@@ -22,6 +27,8 @@ const CRMOrders = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [loading, setLoading] = useState(true);
+  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     fetchOrders();
@@ -138,7 +145,14 @@ const CRMOrders = () => {
                           <div className="text-sm text-muted-foreground mb-1">Сумма</div>
                           <div className="text-2xl font-bold">{order.total?.toLocaleString('ru-RU') || 0} ₽</div>
                         </div>
-                        <Button variant="outline" size="sm">
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => {
+                            setSelectedOrder(order);
+                            setIsModalOpen(true);
+                          }}
+                        >
                           <Icon name="Eye" size={16} className="mr-2" />
                           Подробнее
                         </Button>
@@ -151,6 +165,18 @@ const CRMOrders = () => {
           )}
         </CardContent>
       </Card>
+
+      <OrderDetailModal
+        order={selectedOrder}
+        isOpen={isModalOpen}
+        onClose={() => {
+          setIsModalOpen(false);
+          setSelectedOrder(null);
+        }}
+        onUpdate={() => {
+          fetchOrders();
+        }}
+      />
     </div>
   );
 };
