@@ -1,0 +1,68 @@
+================================================================================
+ADMIN USER CREDENTIALS UPDATE - QUICK START
+================================================================================
+
+OBJECTIVE:
+  Update admin user credentials in database
+  - Old email: admin@motodvigni.ru
+  - New email: admin
+  - Password: Belka1608
+
+REQUIREMENTS:
+  pip install bcrypt psycopg2-binary
+
+================================================================================
+OPTION 1: AUTOMATED EXECUTION (RECOMMENDED)
+================================================================================
+
+Step 1: Set database connection
+  export DATABASE_URL='postgresql://user:password@host:port/database'
+
+Step 2: Run the update script
+  python3 backend/update_admin_simple_query.py
+
+This script will:
+  ✓ Generate bcrypt hash for "Belka1608"
+  ✓ Execute SQL UPDATE using simple query protocol (no placeholders)
+  ✓ Verify email changed to "admin"
+  ✓ Verify password hash works
+  ✓ Display complete verification results
+
+================================================================================
+OPTION 2: MANUAL SQL EXECUTION
+================================================================================
+
+Step 1: Generate the hash and SQL statement
+  python3 backend/generate_update_sql.py
+
+Step 2: Copy the SQL UPDATE statement from output
+
+Step 3: Execute in your database client (psql, pgAdmin, etc.)
+
+Step 4: Verify with:
+  python3 backend/verify_admin_update.py
+
+================================================================================
+VERIFICATION
+================================================================================
+
+After execution, verify the update:
+  python3 backend/verify_admin_update.py
+
+Expected result:
+  ✓ User 'admin' exists
+  ✓ Password 'Belka1608' verified against stored hash
+  ✓ Ready to login with new credentials
+
+================================================================================
+NEW LOGIN CREDENTIALS
+================================================================================
+
+  Login/Email: admin
+  Password:    Belka1608
+
+================================================================================
+
+For detailed documentation, see: ADMIN_UPDATE_EXECUTION_GUIDE.md
+
+================================================================================

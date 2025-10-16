@@ -1,0 +1,113 @@
+================================================================================
+  ADMIN UPDATE - QUICK START
+================================================================================
+
+TASK: Update admin user credentials in database
+  - Change email from: admin@motodvigni.ru -> admin
+  - Set password to: Belka1608
+  - Use SIMPLE QUERY PROTOCOL (no $1, %s placeholders)
+
+================================================================================
+  EXECUTE NOW (3 commands)
+================================================================================
+
+  # 1. Install dependencies
+  pip install bcrypt psycopg2-binary
+
+  # 2. Set database connection
+  export DATABASE_URL='postgresql://user:password@host:port/database'
+
+  # 3. Run update script
+  python3 backend/update_admin_simple_query.py
+
+================================================================================
+  RESULT
+================================================================================
+
+  After execution you'll be able to login with:
+    Login:    admin
+    Password: Belka1608
+
+================================================================================
+  FILES CREATED
+================================================================================
+
+  PRIMARY EXECUTION:
+    • backend/update_admin_simple_query.py  <- MAIN SCRIPT (automated)
+    • backend/generate_update_sql.py        <- SQL generator (manual)
+
+  DOCUMENTATION:
+    • FINAL_EXECUTION_SUMMARY.md            <- Complete summary
+    • SIMPLE_QUERY_PROTOCOL_EXECUTION.md    <- Technical details
+    • ADMIN_UPDATE_EXECUTION_GUIDE.md       <- Full guide
+    • QUICK_START.txt                       <- This file
+
+================================================================================
+  WHAT THE SCRIPT DOES
+================================================================================
+
+  [Step 1] Generate bcrypt hash for "Belka1608"
+  [Step 2] Build SQL with embedded values (no placeholders)
+  [Step 3] Connect to database
+  [Step 4] Execute UPDATE statement
+  [Step 5] Verify email changed and password works
+
+  Protocol: SIMPLE QUERY (values embedded directly in SQL string)
+  Example:  UPDATE users SET email = 'admin', 
+            password_hash = '$2b$12$...' ...
+
+================================================================================
+  VERIFICATION
+================================================================================
+
+  Run this after update to confirm it worked:
+    python3 backend/verify_admin_update.py
+
+  Or query database directly:
+    SELECT id, email, role FROM users WHERE email = 'admin';
+
+================================================================================
+  ALTERNATIVE: MANUAL SQL EXECUTION
+================================================================================
+
+  If you prefer to execute SQL manually:
+
+  1. Generate the SQL statement:
+     python3 backend/generate_update_sql.py
+
+  2. Copy the SQL UPDATE statement from output
+
+  3. Execute in your database client (psql, pgAdmin, etc.)
+
+  4. Verify with:
+     python3 backend/verify_admin_update.py
+
+================================================================================
+  KEY FEATURES (Simple Query Protocol)
+================================================================================
+
+  ✓ No placeholders ($1, %s, ?) in SQL
+  ✓ Values embedded directly in SQL string
+  ✓ Single quotes properly escaped (' becomes '')
+  ✓ Dollar signs preserved as-is in hash
+  ✓ Compatible with Python's bcrypt.checkpw()
+  ✓ Automatic verification after update
+  ✓ Complete error handling
+
+================================================================================
+  NEW CREDENTIALS
+================================================================================
+
+  Login/Email: admin
+  Password:    Belka1608
+
+================================================================================
+  NEED HELP?
+================================================================================
+
+  See documentation:
+    • FINAL_EXECUTION_SUMMARY.md          (complete overview)
+    • SIMPLE_QUERY_PROTOCOL_EXECUTION.md  (technical details)
+    • ADMIN_UPDATE_EXECUTION_GUIDE.md     (troubleshooting)
+
+================================================================================
