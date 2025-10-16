@@ -146,6 +146,11 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             
             user_id, password_hash, full_name, role, is_active = result
             
+            # Debug logging
+            print(f"DEBUG: Found user {email}, id={user_id}, is_active={is_active}")
+            print(f"DEBUG: Password hash from DB: {password_hash[:20]}...")
+            print(f"DEBUG: Password received: {password}")
+            
             if not is_active:
                 cur.close()
                 conn.close()
@@ -159,7 +164,10 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                     'isBase64Encoded': False
                 }
             
-            if not bcrypt.checkpw(password.encode('utf-8'), password_hash.encode('utf-8')):
+            password_match = bcrypt.checkpw(password.encode('utf-8'), password_hash.encode('utf-8'))
+            print(f"DEBUG: Password match result: {password_match}")
+            
+            if not password_match:
                 cur.close()
                 conn.close()
                 return {
