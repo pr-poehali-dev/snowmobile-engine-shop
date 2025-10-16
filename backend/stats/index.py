@@ -87,6 +87,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     if method == 'GET':
         query_params = event.get('queryStringParameters') or {}
         period = query_params.get('period', 'all')
+        status_filter = query_params.get('status', 'all')
         
         conn = get_db_connection()
         cur = conn.cursor()
@@ -101,6 +102,10 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         elif period == 'year':
             date_filter = "AND created_at >= NOW() - INTERVAL '365 days'"
         
+        status_filter_sql = ""
+        if status_filter != 'all':
+            status_filter_sql = f"AND status = '{status_filter}'"
+        
         cur.execute(f"""
             SELECT 
                 COUNT(*) as total_orders,
@@ -108,7 +113,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                 COALESCE(SUM(total_items), 0) as total_items,
                 COALESCE(AVG(CASE WHEN status = 'completed' THEN total_price ELSE NULL END), 0) as avg_order_value
             FROM orders
-            WHERE 1=1 {date_filter}
+            WHERE 1=1 {date_filter} {status_filter_sql}
         """)
         
         stats_row = cur.fetchone()
@@ -120,7 +125,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         cur.execute(f"""
             SELECT status, COUNT(*) as count
             FROM orders
-            WHERE 1=1 {date_filter}
+            WHERE 1=1 {date_filter} {status_filter_sql}
             GROUP BY status
             ORDER BY count DESC
         """)
@@ -135,7 +140,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         cur.execute(f"""
             SELECT city, COUNT(*) as count, SUM(total_price) as revenue
             FROM orders
-            WHERE 1=1 {date_filter}
+            WHERE 1=1 {date_filter} {status_filter_sql}
             GROUP BY city
             ORDER BY count DESC
             LIMIT 10
@@ -152,7 +157,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         cur.execute(f"""
             SELECT order_items, status
             FROM orders
-            WHERE 1=1 {date_filter}
+            WHERE 1=1 {date_filter} {status_filter_sql}
         """)
         
         product_stats = {}
@@ -189,13 +194,17 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                 'revenue': float(data['revenue'])
             })
         
+        daily_filter = "WHERE created_at >= NOW() - INTERVAL '30 days'"
+        if status_filter != 'all':
+            daily_filter += f" AND status = '{status_filter}'"
+        
         cur.execute(f"""
             SELECT 
                 DATE(created_at) as date, 
                 COUNT(*) as orders, 
                 SUM(CASE WHEN status = 'completed' THEN total_price ELSE 0 END) as revenue
             FROM orders
-            WHERE created_at >= NOW() - INTERVAL '30 days'
+            {daily_filter}
             GROUP BY DATE(created_at)
             ORDER BY date ASC
         """)

@@ -45,16 +45,17 @@ const CRMDashboard = () => {
   const [statusBreakdown, setStatusBreakdown] = useState<StatusBreakdown[]>([]);
   const [loading, setLoading] = useState(true);
   const [period, setPeriod] = useState('all');
+  const [statusFilter, setStatusFilter] = useState('all');
 
   useEffect(() => {
     fetchDashboardStats();
-  }, [period]);
+  }, [period, statusFilter]);
 
   const fetchDashboardStats = async () => {
     setLoading(true);
     try {
       const token = localStorage.getItem('crm_token');
-      const response = await fetch(`https://functions.poehali.dev/97017881-7f77-46c3-a9fc-ba0e40b3be0b?period=${period}`, {
+      const response = await fetch(`https://functions.poehali.dev/97017881-7f77-46c3-a9fc-ba0e40b3be0b?period=${period}&status=${statusFilter}`, {
         headers: {
           'X-Session-Token': token || ''
         }
@@ -168,7 +169,45 @@ const CRMDashboard = () => {
           <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
           <p className="text-muted-foreground">Статистика продаж {getPeriodLabel()}</p>
         </div>
-        <Select value={period} onValueChange={setPeriod}>
+        <div className="flex gap-3">
+          <Select value={statusFilter} onValueChange={setStatusFilter}>
+            <SelectTrigger className="w-[200px]">
+              <SelectValue placeholder="Статус заказов" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">
+                <div className="flex items-center gap-2">
+                  <Icon name="List" size={16} />
+                  Все статусы
+                </div>
+              </SelectItem>
+              <SelectItem value="new">
+                <div className="flex items-center gap-2">
+                  <Icon name="FileText" size={16} />
+                  Новые
+                </div>
+              </SelectItem>
+              <SelectItem value="processing">
+                <div className="flex items-center gap-2">
+                  <Icon name="Clock" size={16} />
+                  В обработке
+                </div>
+              </SelectItem>
+              <SelectItem value="completed">
+                <div className="flex items-center gap-2">
+                  <Icon name="CheckCircle" size={16} />
+                  Выполненные
+                </div>
+              </SelectItem>
+              <SelectItem value="cancelled">
+                <div className="flex items-center gap-2">
+                  <Icon name="XCircle" size={16} />
+                  Отменённые
+                </div>
+              </SelectItem>
+            </SelectContent>
+          </Select>
+          <Select value={period} onValueChange={setPeriod}>
           <SelectTrigger className="w-[200px]">
             <SelectValue placeholder="Выберите период" />
           </SelectTrigger>
