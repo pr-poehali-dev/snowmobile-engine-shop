@@ -3,6 +3,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import AIAssistant from '@/components/AIAssistant';
 import ScrollToTop from '@/components/ScrollToTop';
+import FloatingCallButton from '@/components/FloatingCallButton';
 
 interface LayoutProps {
   children: ReactNode;
@@ -48,6 +49,7 @@ const Layout = ({
 
       <Footer />
       <ScrollToTop />
+      <FloatingCallButton />
       <AIAssistant isOpen={isAIOpen} setIsOpen={setIsAIOpen} />
     </div>
   );
