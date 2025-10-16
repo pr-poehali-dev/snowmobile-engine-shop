@@ -10,24 +10,30 @@ import psycopg2
 import bcrypt
 import secrets
 from datetime import datetime, timedelta
-from typing import Dict, Any, Optional, Tuple
+from typing import Dict, Any, Optional
 
 def get_db_connection():
     database_url = os.environ.get('DATABASE_URL')
     return psycopg2.connect(database_url)
 
+def escape_sql_string(s: str) -> str:
+    """Экранирует одинарные кавычки для SQL"""
+    return s.replace("'", "''")
+
 def verify_session(session_token: str) -> Optional[Dict[str, Any]]:
     conn = get_db_connection()
     cur = conn.cursor()
     
-    query = """
+    session_token_escaped = escape_sql_string(session_token)
+    
+    query = f"""
         SELECT u.id, u.email, u.full_name, u.role, u.is_active
         FROM sessions s
         JOIN users u ON s.user_id = u.id
-        WHERE s.session_token = %s AND s.expires_at > NOW() AND u.is_active = true
+        WHERE s.session_token = '{session_token_escaped}' AND s.expires_at > NOW() AND u.is_active = true
     """
     
-    cur.execute(query, (session_token,))
+    cur.execute(query)
     result = cur.fetchone()
     
     cur.close()
@@ -119,10 +125,10 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             conn = get_db_connection()
             cur = conn.cursor()
             
-            cur.execute(
-                "SELECT id, password_hash, full_name, role, is_active FROM users WHERE email = %s",
-                (email,)
-            )
+            email_escaped = escape_sql_string(email)
+            
+            select_query = f"SELECT id, password_hash, full_name, role, is_active FROM users WHERE email = '{email_escaped}'"
+            cur.execute(select_query)
             result = cur.fetchone()
             
             if not result:
@@ -167,12 +173,11 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                 }
             
             session_token = secrets.token_urlsafe(32)
-            expires_at = datetime.now() + timedelta(days=7)
+            expires_at = (datetime.now() + timedelta(days=7)).strftime('%Y-%m-%d %H:%M:%S')
+            session_token_escaped = escape_sql_string(session_token)
             
-            cur.execute(
-                "INSERT INTO sessions (user_id, session_token, expires_at) VALUES (%s, %s, %s)",
-                (user_id, session_token, expires_at)
-            )
+            insert_session_query = f"INSERT INTO sessions (user_id, session_token, expires_at) VALUES ({user_id}, '{session_token_escaped}', '{expires_at}')"
+            cur.execute(insert_session_query)
             conn.commit()
             
             cur.close()
@@ -204,7 +209,9 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             if session_token:
                 conn = get_db_connection()
                 cur = conn.cursor()
-                cur.execute("UPDATE sessions SET expires_at = NOW() WHERE session_token = %s", (session_token,))
+                session_token_escaped = escape_sql_string(session_token)
+                update_query = f"UPDATE sessions SET expires_at = NOW() WHERE session_token = '{session_token_escaped}'"
+                cur.execute(update_query)
                 conn.commit()
                 cur.close()
                 conn.close()

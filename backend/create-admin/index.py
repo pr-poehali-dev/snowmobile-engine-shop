@@ -14,6 +14,10 @@ def get_db_connection():
     database_url = os.environ.get('DATABASE_URL')
     return psycopg2.connect(database_url)
 
+def escape_sql_string(s: str) -> str:
+    """Экранирует одинарные кавычки для SQL"""
+    return s.replace("'", "''")
+
 def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     method: str = event.get('httpMethod', 'POST')
     
@@ -38,16 +42,22 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             password = body_data.get('password', 'NewAdmin2024!')
             full_name = body_data.get('full_name', 'Новый Администратор')
             
+            # Escape strings for SQL
+            email_escaped = escape_sql_string(email)
+            full_name_escaped = escape_sql_string(full_name)
+            
             # Generate bcrypt hash
             salt = bcrypt.gensalt()
             password_hash = bcrypt.hashpw(password.encode('utf-8'), salt).decode('utf-8')
+            password_hash_escaped = escape_sql_string(password_hash)
             
             # Connect to database
             conn = get_db_connection()
             cur = conn.cursor()
             
-            # Check if email already exists
-            cur.execute("SELECT id FROM users WHERE email = %s", (email,))
+            # Check if email already exists (Simple Query Protocol)
+            check_query = f"SELECT id FROM users WHERE email = '{email_escaped}'"
+            cur.execute(check_query)
             existing = cur.fetchone()
             
             if existing:
@@ -66,16 +76,14 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                     'isBase64Encoded': False
                 }
             
-            # Insert new admin user
-            cur.execute(
-                """
+            # Insert new admin user (Simple Query Protocol)
+            insert_query = f"""
                 INSERT INTO users (email, password_hash, full_name, role, is_active, created_at, updated_at)
-                VALUES (%s, %s, %s, %s, %s, NOW(), NOW())
+                VALUES ('{email_escaped}', '{password_hash_escaped}', '{full_name_escaped}', 'admin', true, NOW(), NOW())
                 RETURNING id, email, full_name, role, is_active
-                """,
-                (email, password_hash, full_name, 'admin', True)
-            )
+            """
             
+            cur.execute(insert_query)
             new_user = cur.fetchone()
             conn.commit()
             
