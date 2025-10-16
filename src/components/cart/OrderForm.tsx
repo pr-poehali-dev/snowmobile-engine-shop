@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import Icon from '@/components/ui/icon';
@@ -47,6 +48,7 @@ const OrderForm = ({ cartItems, totalPrice, totalItems, onBack, onSuccess }: Ord
   const [city, setCity] = useState('');
   const [fullName, setFullName] = useState('');
   const [address, setAddress] = useState('');
+  const [comment, setComment] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [openCityPopover, setOpenCityPopover] = useState(false);
   const [cityDetected, setCityDetected] = useState(false);
@@ -107,6 +109,7 @@ const OrderForm = ({ cartItems, totalPrice, totalItems, onBack, onSuccess }: Ord
           phone,
           city,
           address,
+          comment,
           items: cartItems,
           totalPrice,
           totalItems
@@ -256,9 +259,21 @@ const OrderForm = ({ cartItems, totalPrice, totalItems, onBack, onSuccess }: Ord
             />
           )}
         </div>
+
+        <div className="space-y-2 animate-in fade-in slide-in-from-bottom-3 duration-300 delay-500">
+          <Label htmlFor="comment">Комментарий к заказу</Label>
+          <Textarea
+            id="comment"
+            placeholder="Укажите удобное время звонка, пожелания по доставке или другие детали..."
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
+            rows={3}
+            className="resize-none"
+          />
+        </div>
       </div>
 
-      <div className="flex gap-2 animate-in fade-in slide-in-from-bottom-3 duration-300 delay-500">
+      <div className="flex gap-2 animate-in fade-in slide-in-from-bottom-3 duration-300 delay-[600ms]">
         <Button
           variant="outline"
           className="flex-1"
