@@ -8,14 +8,21 @@ import Icon from '@/components/ui/icon';
 import OrderDetailModal from './OrderDetailModal';
 import * as XLSX from 'xlsx';
 
+interface OrderItem {
+  id: string;
+  name: string;
+  price: number;
+  quantity: number;
+}
+
 interface Order {
   id: number;
   customer_name: string;
   customer_phone: string;
   customer_city?: string;
   customer_address?: string;
-  products: string;
-  total: number;
+  order_items: OrderItem[];
+  total_price: number;
   status: string;
   payment_status: string;
   shipping_status?: string;
@@ -57,15 +64,8 @@ const CRMOrders = () => {
 
   const exportToExcel = () => {
     const dataToExport = filteredOrders.map((order) => {
-      let products = [];
-      try {
-        products = JSON.parse(order.products);
-      } catch {
-        products = [];
-      }
-
-      const productsList = products
-        .map((p: any) => `${p.name} (${p.quantity} шт. × ${p.price}₽)`)
+      const productsList = (order.order_items || [])
+        .map((p) => `${p.name} (${p.quantity} шт. × ${p.price}₽)`)
         .join(', ');
 
       return {
@@ -76,7 +76,7 @@ const CRMOrders = () => {
         'Город': order.customer_city || '',
         'Адрес': order.customer_address || '',
         'Товары': productsList,
-        'Сумма': order.total,
+        'Сумма': order.total_price,
         'Статус': order.status === 'new' ? 'Новый' : order.status === 'processing' ? 'В обработке' : order.status === 'completed' ? 'Выполнен' : 'Отменен',
         'Оплата': order.payment_status === 'pending' ? 'Ожидает оплаты' : order.payment_status === 'paid' ? 'Оплачен' : 'Возврат',
         'Доставка': order.shipping_status === 'pending' ? 'Ожидает отправки' : order.shipping_status === 'shipped' ? 'Отправлен' : order.shipping_status === 'delivered' ? 'Доставлен' : '',
@@ -209,7 +209,7 @@ const CRMOrders = () => {
                       <div className="flex items-center gap-6">
                         <div className="text-right">
                           <div className="text-sm text-muted-foreground mb-1">Сумма</div>
-                          <div className="text-2xl font-bold">{order.total?.toLocaleString('ru-RU') || 0} ₽</div>
+                          <div className="text-2xl font-bold">{order.total_price?.toLocaleString('ru-RU') || 0} ₽</div>
                         </div>
                         <Button 
                           variant="outline" 

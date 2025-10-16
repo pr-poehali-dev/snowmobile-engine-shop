@@ -14,14 +14,21 @@ import { Badge } from '@/components/ui/badge';
 import Icon from '@/components/ui/icon';
 import { useToast } from '@/hooks/use-toast';
 
+interface OrderItem {
+  id: string;
+  name: string;
+  price: number;
+  quantity: number;
+}
+
 interface Order {
   id: number;
   customer_name: string;
   customer_phone: string;
   customer_city?: string;
   customer_address?: string;
-  products: string;
-  total: number;
+  order_items: OrderItem[];
+  total_price: number;
   status: string;
   payment_status: string;
   shipping_status?: string;
@@ -140,11 +147,28 @@ const OrderDetailModal = ({ order, isOpen, onClose, onUpdate }: OrderDetailModal
               <Icon name="ShoppingCart" size={18} />
               Состав заказа
             </h3>
-            <div className="bg-muted p-4 rounded-lg">
-              <div className="whitespace-pre-wrap">{order.products}</div>
-              <div className="mt-4 pt-4 border-t border-border">
-                <div className="text-xl font-bold">
-                  Итого: {order.total.toLocaleString('ru-RU')} ₽
+            <div className="bg-muted p-4 rounded-lg space-y-3">
+              {order.order_items && order.order_items.length > 0 ? (
+                order.order_items.map((item, idx) => (
+                  <div key={idx} className="flex justify-between items-start py-2 border-b border-border last:border-0">
+                    <div className="flex-1">
+                      <div className="font-medium">{item.name}</div>
+                      <div className="text-sm text-muted-foreground">
+                        {item.price.toLocaleString('ru-RU')} ₽ × {item.quantity} шт.
+                      </div>
+                    </div>
+                    <div className="font-semibold">
+                      {(item.price * item.quantity).toLocaleString('ru-RU')} ₽
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="text-muted-foreground">Нет товаров в заказе</div>
+              )}
+              <div className="mt-4 pt-4 border-t-2 border-border">
+                <div className="text-xl font-bold flex justify-between">
+                  <span>Итого:</span>
+                  <span>{order.total_price.toLocaleString('ru-RU')} ₽</span>
                 </div>
               </div>
             </div>

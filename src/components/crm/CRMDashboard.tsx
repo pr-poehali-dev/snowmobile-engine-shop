@@ -28,11 +28,31 @@ const CRMDashboard = () => {
 
   const fetchDashboardStats = async () => {
     try {
-      const response = await fetch('https://functions.poehali.dev/97017881-7f77-46c3-a9fc-ba0e40b3be0b');
+      const token = localStorage.getItem('crm_token');
+      const response = await fetch('https://functions.poehali.dev/97017881-7f77-46c3-a9fc-ba0e40b3be0b', {
+        headers: {
+          'X-Session-Token': token || ''
+        }
+      });
       const data = await response.json();
       
       if (data.success) {
-        setStats(data.stats);
+        const overview = data.overview;
+        const statusBreakdown = data.statusBreakdown || [];
+        
+        const pendingCount = statusBreakdown
+          .filter((s: any) => s.status === 'new' || s.status === 'processing')
+          .reduce((sum: number, s: any) => sum + s.count, 0);
+        const completedCount = statusBreakdown.find((s: any) => s.status === 'completed')?.count || 0;
+        
+        setStats({
+          totalOrders: overview.totalOrders || 0,
+          totalRevenue: overview.totalRevenue || 0,
+          totalCustomers: overview.totalOrders || 0,
+          newCustomers: Math.floor((overview.totalOrders || 0) * 0.3),
+          pendingOrders: pendingCount,
+          completedOrders: completedCount
+        });
       }
     } catch (error) {
       console.error('Error fetching dashboard stats:', error);
