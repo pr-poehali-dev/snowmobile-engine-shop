@@ -230,6 +230,7 @@ const Header = ({
                       <CartSummary
                         totalPrice={totalPrice}
                         onCheckout={() => setShowOrderForm(true)}
+                        onClearCart={clearCart}
                       />
                     )}
                   </>
