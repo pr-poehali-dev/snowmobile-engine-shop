@@ -104,9 +104,9 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         cur.execute(f"""
             SELECT 
                 COUNT(*) as total_orders,
-                COALESCE(SUM(total_price), 0) as total_revenue,
+                COALESCE(SUM(CASE WHEN status = 'completed' THEN total_price ELSE 0 END), 0) as total_revenue,
                 COALESCE(SUM(total_items), 0) as total_items,
-                COALESCE(AVG(total_price), 0) as avg_order_value
+                COALESCE(AVG(CASE WHEN status = 'completed' THEN total_price ELSE NULL END), 0) as avg_order_value
             FROM orders
             WHERE 1=1 {date_filter}
         """)
@@ -150,7 +150,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             })
         
         cur.execute(f"""
-            SELECT order_items
+            SELECT order_items, status
             FROM orders
             WHERE 1=1 {date_filter}
         """)
@@ -158,6 +158,9 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         product_stats = {}
         for row in cur.fetchall():
             items = row[0]
+            status = row[1]
+            is_completed = status == 'completed'
+            
             if items:
                 for item in items:
                     name = item.get('name', 'Неизвестный товар')
@@ -165,21 +168,32 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                     price = item.get('price', 0)
                     
                     if name not in product_stats:
-                        product_stats[name] = {'quantity': 0, 'revenue': 0}
+                        product_stats[name] = {
+                            'orderedQty': 0,
+                            'soldQty': 0,
+                            'revenue': 0
+                        }
                     
-                    product_stats[name]['quantity'] += quantity
-                    product_stats[name]['revenue'] += quantity * price
+                    product_stats[name]['orderedQty'] += quantity
+                    
+                    if is_completed:
+                        product_stats[name]['soldQty'] += quantity
+                        product_stats[name]['revenue'] += quantity * price
         
         top_products = []
-        for name, data in sorted(product_stats.items(), key=lambda x: x[1]['quantity'], reverse=True)[:10]:
+        for name, data in sorted(product_stats.items(), key=lambda x: x[1]['orderedQty'], reverse=True)[:10]:
             top_products.append({
                 'name': name,
-                'quantity': data['quantity'],
+                'orderedQty': data['orderedQty'],
+                'soldQty': data['soldQty'],
                 'revenue': float(data['revenue'])
             })
         
         cur.execute(f"""
-            SELECT DATE(created_at) as date, COUNT(*) as orders, SUM(total_price) as revenue
+            SELECT 
+                DATE(created_at) as date, 
+                COUNT(*) as orders, 
+                SUM(CASE WHEN status = 'completed' THEN total_price ELSE 0 END) as revenue
             FROM orders
             WHERE created_at >= NOW() - INTERVAL '30 days'
             GROUP BY DATE(created_at)

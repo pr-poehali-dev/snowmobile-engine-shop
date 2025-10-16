@@ -21,7 +21,8 @@ interface DailyStats {
 
 interface TopProduct {
   name: string;
-  quantity: number;
+  orderedQty: number;
+  soldQty: number;
   revenue: number;
 }
 
@@ -97,7 +98,7 @@ const CRMDashboard = () => {
       bgColor: 'bg-blue-50',
     },
     {
-      title: 'Выручка',
+      title: 'Выручка (выполненные)',
       value: `${stats.totalRevenue.toLocaleString('ru-RU')} ₽`,
       icon: 'DollarSign',
       color: 'text-green-600',
@@ -298,7 +299,7 @@ const CRMDashboard = () => {
       <Card>
         <CardHeader>
           <CardTitle>Топ-10 товаров</CardTitle>
-          <CardDescription>Самые популярные товары по количеству продаж</CardDescription>
+          <CardDescription>Популярные товары: заказы vs фактические продажи</CardDescription>
         </CardHeader>
         <CardContent>
           {topProducts.length > 0 ? (
@@ -313,14 +314,22 @@ const CRMDashboard = () => {
                   tickFormatter={(name) => name.length > 20 ? name.substring(0, 20) + '...' : name}
                 />
                 <Tooltip 
-                  formatter={(value: number, name: string) => [
-                    name === 'revenue' ? `${value.toLocaleString('ru-RU')} ₽` : `${value} шт.`,
-                    name === 'revenue' ? 'Выручка' : 'Продано'
-                  ]}
+                  formatter={(value: number, name: string) => {
+                    if (name === 'revenue') return [`${value.toLocaleString('ru-RU')} ₽`, 'Выручка'];
+                    if (name === 'soldQty') return [`${value} шт.`, 'Продано'];
+                    return [`${value} шт.`, 'Заказано'];
+                  }}
                 />
-                <Legend formatter={(value) => value === 'revenue' ? 'Выручка' : 'Продано'} />
-                <Bar dataKey="quantity" fill="#3b82f6" />
-                <Bar dataKey="revenue" fill="#10b981" />
+                <Legend 
+                  formatter={(value) => {
+                    if (value === 'revenue') return 'Выручка';
+                    if (value === 'soldQty') return 'Продано';
+                    return 'Заказано';
+                  }} 
+                />
+                <Bar dataKey="orderedQty" fill="#f59e0b" name="Заказано" />
+                <Bar dataKey="soldQty" fill="#3b82f6" name="Продано" />
+                <Bar dataKey="revenue" fill="#10b981" name="Выручка" />
               </BarChart>
             </ResponsiveContainer>
           ) : (
