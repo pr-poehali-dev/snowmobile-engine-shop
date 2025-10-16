@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import Icon from '@/components/ui/icon';
 import OrderDetailModal from './OrderDetailModal';
+import * as XLSX from 'xlsx';
 
 interface Order {
   id: number;
@@ -47,6 +48,58 @@ const CRMOrders = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const exportToExcel = () => {
+    const dataToExport = filteredOrders.map((order) => {
+      let products = [];
+      try {
+        products = JSON.parse(order.products);
+      } catch {
+        products = [];
+      }
+
+      const productsList = products
+        .map((p: any) => `${p.name} (${p.quantity} шт. × ${p.price}₽)`)
+        .join(', ');
+
+      return {
+        '№ заказа': order.id,
+        'Дата': new Date(order.created_at).toLocaleDateString('ru-RU'),
+        'Клиент': order.customer_name,
+        'Телефон': order.customer_phone,
+        'Город': order.customer_city || '',
+        'Адрес': order.customer_address || '',
+        'Товары': productsList,
+        'Сумма': order.total,
+        'Статус': order.status === 'new' ? 'Новый' : order.status === 'processing' ? 'В обработке' : order.status === 'completed' ? 'Выполнен' : 'Отменен',
+        'Оплата': order.payment_status === 'pending' ? 'Ожидает оплаты' : order.payment_status === 'paid' ? 'Оплачен' : 'Возврат',
+        'Доставка': order.shipping_status === 'pending' ? 'Ожидает отправки' : order.shipping_status === 'shipped' ? 'Отправлен' : order.shipping_status === 'delivered' ? 'Доставлен' : '',
+        'Заметки': order.notes || '',
+      };
+    });
+
+    const worksheet = XLSX.utils.json_to_sheet(dataToExport);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Заказы');
+
+    worksheet['!cols'] = [
+      { wch: 10 },
+      { wch: 12 },
+      { wch: 20 },
+      { wch: 15 },
+      { wch: 15 },
+      { wch: 30 },
+      { wch: 40 },
+      { wch: 12 },
+      { wch: 15 },
+      { wch: 15 },
+      { wch: 15 },
+      { wch: 30 },
+    ];
+
+    const fileName = `Заказы_${new Date().toLocaleDateString('ru-RU').replace(/\./g, '-')}.xlsx`;
+    XLSX.writeFile(workbook, fileName);
   };
 
   const getStatusBadge = (status: string) => {
@@ -99,6 +152,14 @@ const CRMOrders = () => {
                 <SelectItem value="cancelled">Отменены</SelectItem>
               </SelectContent>
             </Select>
+            <Button
+              variant="outline"
+              onClick={exportToExcel}
+              disabled={filteredOrders.length === 0}
+            >
+              <Icon name="Download" size={18} className="mr-2" />
+              Экспорт в Excel
+            </Button>
           </div>
 
           {loading ? (
