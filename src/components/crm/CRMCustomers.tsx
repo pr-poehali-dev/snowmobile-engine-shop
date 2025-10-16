@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { useToast } from '@/hooks/use-toast';
 import Icon from '@/components/ui/icon';
+import CustomerDetailModal from './CustomerDetailModal';
 
 interface Customer {
   id: number;
@@ -25,6 +26,8 @@ const CRMCustomers = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
+  const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
   const [saving, setSaving] = useState(false);
   const [newCustomer, setNewCustomer] = useState({
     name: '',
@@ -183,6 +186,17 @@ const CRMCustomers = () => {
                         <Badge variant={customer.status === 'active' ? 'default' : 'secondary'}>
                           {customer.status === 'active' ? 'Активен' : 'Неактивен'}
                         </Badge>
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => {
+                            setSelectedCustomer(customer);
+                            setIsDetailModalOpen(true);
+                          }}
+                        >
+                          <Icon name="Eye" size={16} className="mr-2" />
+                          Подробнее
+                        </Button>
                       </div>
                     </div>
                   </CardContent>
@@ -250,6 +264,15 @@ const CRMCustomers = () => {
           </div>
         </DialogContent>
       </Dialog>
+
+      <CustomerDetailModal 
+        customer={selectedCustomer}
+        isOpen={isDetailModalOpen}
+        onClose={() => {
+          setIsDetailModalOpen(false);
+          setSelectedCustomer(null);
+        }}
+      />
     </div>
   );
 };

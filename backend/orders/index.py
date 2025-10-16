@@ -88,6 +88,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         query_params = event.get('queryStringParameters') or {}
         status_filter = query_params.get('status')
         search_query = query_params.get('search', '').strip()
+        phone_filter = query_params.get('phone', '').strip()
         limit = int(query_params.get('limit', '100'))
         offset = int(query_params.get('offset', '0'))
         
@@ -100,6 +101,10 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         if status_filter and status_filter != 'все':
             where_clauses.append("status = %s")
             params.append(status_filter)
+        
+        if phone_filter:
+            where_clauses.append("phone = %s")
+            params.append(phone_filter)
         
         if search_query:
             where_clauses.append("(phone LIKE %s OR full_name LIKE %s OR order_number LIKE %s)")
