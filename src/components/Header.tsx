@@ -10,6 +10,7 @@ import { Label } from '@/components/ui/label';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import Icon from '@/components/ui/icon';
+import AddressAutocomplete from '@/components/AddressAutocomplete';
 
 interface CartItem {
   id: string;
@@ -44,9 +45,22 @@ const Header = ({
   const [phone, setPhone] = useState('');
   const [city, setCity] = useState('');
   const [fullName, setFullName] = useState('');
+  const [address, setAddress] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [openCityPopover, setOpenCityPopover] = useState(false);
   const [cityDetected, setCityDetected] = useState(false);
+  const [dadataToken, setDadataToken] = useState('');
+
+  useEffect(() => {
+    fetch('https://functions.poehali.dev/a68422b0-053a-4ce5-ae24-75cb2e280ea8/secrets/DADATA_API_KEY')
+      .then(res => res.json())
+      .then(data => {
+        if (data.value) {
+          setDadataToken(data.value);
+        }
+      })
+      .catch(err => console.log('DaData token fetch failed:', err));
+  }, []);
 
   useEffect(() => {
     const detectCity = async () => {
@@ -89,7 +103,7 @@ const Header = ({
     ? russianCities.filter(c => c.toLowerCase().includes(city.toLowerCase()))
     : russianCities;
 
-  const isFormValid = phone.trim().length > 0 && city.trim().length > 0;
+  const isFormValid = phone.trim().length > 0 && city.trim().length > 0 && address.trim().length > 0;
 
   const handleSubmitOrder = async () => {
     if (!isFormValid || isSubmitting) return;
@@ -106,6 +120,7 @@ const Header = ({
           fullName: fullName || 'Не указано',
           phone,
           city,
+          address,
           items: cartItems,
           totalPrice,
           totalItems
@@ -130,6 +145,7 @@ const Header = ({
         setPhone('');
         setCity('');
         setFullName('');
+        setAddress('');
         clearCart();
       } else {
         alert('❌ Ошибка при отправке заявки. Попробуйте позже или свяжитесь с нами по телефону.');
@@ -423,6 +439,19 @@ const Header = ({
                             onChange={(e) => setFullName(e.target.value)}
                           />
                         </div>
+
+                        {dadataToken && (
+                          <div className="space-y-2">
+                            <Label htmlFor="address">
+                              Адрес доставки <span className="text-destructive">*</span>
+                            </Label>
+                            <AddressAutocomplete
+                              value={address}
+                              onChange={setAddress}
+                              token={dadataToken}
+                            />
+                          </div>
+                        )}
                       </div>
 
                       <div className="flex gap-2">

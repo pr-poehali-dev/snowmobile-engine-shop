@@ -1,6 +1,6 @@
 '''
 Business: Сохраняет заказ в базу данных PostgreSQL и отправляет уведомление в Telegram
-Args: event с httpMethod POST, body содержит fullName, phone, city, items, totalPrice, totalItems
+Args: event с httpMethod POST, body содержит fullName, phone, city, address, items, totalPrice, totalItems
 Returns: HTTP response с orderNumber или ошибкой
 '''
 
@@ -46,11 +46,12 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         full_name = body_data.get('fullName', '')
         phone = body_data.get('phone', '')
         city = body_data.get('city', '')
+        address = body_data.get('address', '')
         items = body_data.get('items', [])
         total_price = float(body_data.get('totalPrice', 0))
         total_items = int(body_data.get('totalItems', 0))
         
-        if not all([full_name, phone, city, items]):
+        if not all([full_name, phone, city, address, items]):
             return {
                 'statusCode': 400,
                 'headers': {
@@ -69,8 +70,8 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         cur = conn.cursor()
         
         insert_query = """
-            INSERT INTO orders (order_number, full_name, phone, city, total_price, total_items, order_items)
-            VALUES (%s, %s, %s, %s, %s, %s, %s)
+            INSERT INTO orders (order_number, full_name, phone, city, address, total_price, total_items, order_items)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
             RETURNING id
         """
         
@@ -79,6 +80,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             full_name,
             phone,
             city,
+            address,
             total_price,
             total_items,
             Json(items)
@@ -105,6 +107,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
 👤 Клиент: {full_name}
 📱 Телефон: {phone}
 🏙 Город: {city}
+📍 Адрес доставки: {address}
 
 📦 Товары:
 {items_text}

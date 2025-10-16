@@ -53,6 +53,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     
     phone = body_data.get('phone', '')
     city = body_data.get('city', '')
+    address = body_data.get('address', '')
     full_name = body_data.get('fullName', 'Не указано')
     cart_items = body_data.get('cartItems', [])
     total_price = body_data.get('totalPrice', 0)
@@ -65,7 +66,8 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     message = f"""🛒 <b>Новый заказ!</b>
 
 📱 <b>Телефон:</b> {phone}
-🏙 <b>Город получения:</b> {city}
+🏙 <b>Город:</b> {city}
+📍 <b>Адрес доставки:</b> {address}
 👤 <b>ФИО:</b> {full_name}
 
 <b>Товары:</b>
