@@ -88,7 +88,8 @@ const OrderForm = ({ cartItems, totalPrice, totalItems, onBack, onSuccess }: Ord
 
   const phoneDigits = phone.replace(/\D/g, '');
   const isPhoneValid = phoneDigits.length === 11;
-  const isFormValid = isPhoneValid && city.trim().length > 0;
+  const isCityValid = russianCities.includes(city);
+  const isFormValid = isPhoneValid && isCityValid;
 
   const handleSubmitOrder = async () => {
     if (!isFormValid || isSubmitting) return;
@@ -181,7 +182,7 @@ const OrderForm = ({ cartItems, totalPrice, totalItems, onBack, onSuccess }: Ord
                 variant="outline"
                 role="combobox"
                 aria-expanded={openCityPopover}
-                className="w-full justify-between font-normal"
+                className={`w-full justify-between font-normal ${city && !isCityValid ? 'border-destructive' : ''}`}
               >
                 {city || "Выберите город"}
                 <Icon name="ChevronsUpDown" size={16} className="ml-2 opacity-50" />
@@ -219,6 +220,9 @@ const OrderForm = ({ cartItems, totalPrice, totalItems, onBack, onSuccess }: Ord
               </Command>
             </PopoverContent>
           </Popover>
+          {city && !isCityValid && (
+            <p className="text-xs text-destructive animate-in fade-in slide-in-from-top-1 duration-200">Выберите город из списка</p>
+          )}
         </div>
 
         <div className="space-y-2 animate-in fade-in slide-in-from-bottom-3 duration-300 delay-300">
