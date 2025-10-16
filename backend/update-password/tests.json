@@ -1,0 +1,15 @@
+{
+  "tests": [
+    {
+      "name": "Update admin password",
+      "method": "GET",
+      "path": "/",
+      "expectedStatus": 200,
+      "expectedBody": {
+        "success": true,
+        "email": "admin"
+      },
+      "bodyMatcher": "partial"
+    }
+  ]
+}
