@@ -1,19 +1,15 @@
-import { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Badge } from '@/components/ui/badge';
-import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import Icon from '@/components/ui/icon';
-import AddressAutocomplete from '@/components/AddressAutocomplete';
-import InputMask from 'react-input-mask';
+import CartItem from '@/components/cart/CartItem';
+import CartSummary from '@/components/cart/CartSummary';
+import OrderForm from '@/components/cart/OrderForm';
 
-interface CartItem {
+interface CartItemData {
   id: string;
   name: string;
   price: number;
@@ -24,7 +20,7 @@ interface CartItem {
 interface HeaderProps {
   activeSection?: string;
   scrollToSection?: (section: string) => void;
-  cartItems?: CartItem[];
+  cartItems?: CartItemData[];
   updateQuantity?: (id: string, quantity: number) => void;
   removeFromCart?: (id: string) => void;
   clearCart?: () => void;
@@ -43,123 +39,12 @@ const Header = ({
   totalItems = 0,
 }: HeaderProps) => {
   const [showOrderForm, setShowOrderForm] = useState(false);
-  const [phone, setPhone] = useState('');
-  const [city, setCity] = useState('');
-  const [fullName, setFullName] = useState('');
-  const [address, setAddress] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [openCityPopover, setOpenCityPopover] = useState(false);
-  const [cityDetected, setCityDetected] = useState(false);
-  const [dadataToken, setDadataToken] = useState('');
 
-  useEffect(() => {
-    fetch('https://functions.poehali.dev/a68422b0-053a-4ce5-ae24-75cb2e280ea8/secrets/DADATA_API_KEY')
-      .then(res => res.json())
-      .then(data => {
-        if (data.value) {
-          setDadataToken(data.value);
-        }
-      })
-      .catch(err => console.log('DaData token fetch failed:', err));
-  }, []);
-
-  useEffect(() => {
-    const detectCity = async () => {
-      try {
-        const response = await fetch('https://functions.poehali.dev/a68422b0-053a-4ce5-ae24-75cb2e280ea8');
-        const data = await response.json();
-        if (data.city && !city && !cityDetected) {
-          setCity(data.city);
-          setCityDetected(true);
-        }
-      } catch (error) {
-        console.log('City detection failed:', error);
-      }
-    };
-    
-    if (showOrderForm && !cityDetected) {
-      detectCity();
-    }
-  }, [showOrderForm, city, cityDetected]);
-
-  const russianCities = [
-    'Москва', 'Санкт-Петербург', 'Новосибирск', 'Екатеринбург', 'Казань',
-    'Нижний Новгород', 'Челябинск', 'Самара', 'Омск', 'Ростов-на-Дону',
-    'Уфа', 'Красноярск', 'Воронеж', 'Пермь', 'Волгоград',
-    'Краснодар', 'Саратов', 'Тюмень', 'Тольятти', 'Ижевск',
-    'Барнаул', 'Ульяновск', 'Иркутск', 'Хабаровск', 'Ярославль',
-    'Владивосток', 'Махачкала', 'Томск', 'Оренбург', 'Кемерово',
-    'Новокузнецк', 'Рязань', 'Астрахань', 'Набережные Челны', 'Пенза',
-    'Липецк', 'Тула', 'Киров', 'Чебоксары', 'Калининград',
-    'Брянск', 'Курск', 'Иваново', 'Магнитогорск', 'Тверь',
-    'Ставрополь', 'Нижний Тагил', 'Белгород', 'Архангельск', 'Владимир',
-    'Сочи', 'Курган', 'Смоленск', 'Калуга', 'Чита',
-    'Орёл', 'Волжский', 'Череповец', 'Владикавказ', 'Мурманск',
-    'Сургут', 'Вологда', 'Саранск', 'Тамбов', 'Стерлитамак',
-    'Грозный', 'Якутск', 'Кострома', 'Комсомольск-на-Амуре', 'Петрозаводск',
-    'Нижневартовск', 'Новороссийск', 'Йошкар-Ола', 'Химки', 'Таганрог'
-  ];
-
-  const filteredCities = city
-    ? russianCities.filter(c => c.toLowerCase().includes(city.toLowerCase()))
-    : russianCities;
-
-  const phoneDigits = phone.replace(/\D/g, '');
-  const isPhoneValid = phoneDigits.length === 11;
-  const isFormValid = isPhoneValid && city.trim().length > 0 && address.trim().length > 0;
-
-  const handleSubmitOrder = async () => {
-    if (!isFormValid || isSubmitting) return;
-    
-    setIsSubmitting(true);
-
-    try {
-      const response = await fetch('https://functions.poehali.dev/14166080-7df3-43be-8985-e12ee3235156', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          fullName: fullName || 'Не указано',
-          phone,
-          city,
-          address,
-          items: cartItems,
-          totalPrice,
-          totalItems
-        })
-      });
-
-      const data = await response.json();
-
-      if (response.ok && data.success) {
-        if (typeof window !== 'undefined' && (window as any).ym) {
-          (window as any).ym(104609660, 'reachGoal', 'order_success', {
-            order_id: data.orderNumber,
-            order_price: totalPrice,
-            order_items: totalItems,
-            city: city
-          });
-        }
-        
-        alert(`✅ Заказ успешно оформлен!\n\nНомер заказа: ${data.orderNumber}\n\nМы свяжемся с вами по телефону: ${phone}`);
-        
-        setShowOrderForm(false);
-        setPhone('');
-        setCity('');
-        setFullName('');
-        setAddress('');
-        clearCart();
-      } else {
-        alert('❌ Ошибка при отправке заявки. Попробуйте позже или свяжитесь с нами по телефону.');
-      }
-    } catch (error) {
-      console.error('Order submission error:', error);
-      alert('❌ Ошибка при отправке заявки. Проверьте интернет-соединение.');
-    } finally {
-      setIsSubmitting(false);
-    }
+  const handleOrderSuccess = () => {
+    setShowOrderForm(false);
+    clearCart();
   };
+
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-14 md:h-16 items-center justify-between px-4">
@@ -221,13 +106,20 @@ const Header = ({
                 className="flex items-center gap-2 text-left text-base font-medium text-[#0088cc] hover:text-[#0077b5] transition-colors"
               >
                 <Icon name="Send" size={18} />
-                Telegram канал
+                Telegram
+              </a>
+              <a 
+                href="tel:+79000000000"
+                className="flex items-center gap-2 text-left text-base font-medium text-muted-foreground hover:text-primary transition-colors"
+              >
+                <Icon name="Phone" size={18} />
+                +7 (900) 000-00-00
               </a>
             </nav>
           </SheetContent>
         </Sheet>
 
-        <nav className="hidden md:flex items-center gap-8">
+        <nav className="hidden md:flex items-center gap-6">
           <Link
             to="/"
             className={`text-sm font-medium transition-colors hover:text-primary ${
@@ -258,241 +150,92 @@ const Header = ({
               activeSection === 'faq' ? 'text-primary' : 'text-muted-foreground'
             }`}
           >
-            FAQ
+            Вопросы и ответы
           </Link>
         </nav>
 
-        <div className="flex items-center gap-2">
-          <Button
-            size="sm"
-            asChild
-            className="hidden md:flex items-center gap-2 bg-[#0088cc] hover:bg-[#0077b5] text-white"
+        <div className="flex items-center gap-2 md:gap-4">
+          <a 
+            href="https://t.me/lifanburan" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="hidden md:flex"
           >
-            <a 
-              href="https://t.me/lifanburan" 
-              target="_blank" 
-              rel="noopener noreferrer"
-            >
-              <Icon name="Send" size={16} />
-              Telegram
-            </a>
-          </Button>
+            <Button variant="ghost" size="sm" className="gap-2">
+              <Icon name="Send" size={18} className="text-[#0088cc]" />
+              <span className="hidden lg:inline">Telegram</span>
+            </Button>
+          </a>
+          
+          <a 
+            href="tel:+79000000000"
+            className="hidden md:flex"
+          >
+            <Button variant="ghost" size="sm" className="gap-2">
+              <Icon name="Phone" size={18} />
+              <span className="hidden lg:inline">+7 (900) 000-00-00</span>
+            </Button>
+          </a>
 
           <Sheet>
             <SheetTrigger asChild>
-            <Button variant="outline" size="icon" className="relative">
-              <Icon name="ShoppingCart" size={20} />
-              {totalItems > 0 && (
-                <Badge className="absolute -top-2 -right-2 h-5 w-5 flex items-center justify-center p-0 bg-primary text-primary-foreground">
-                  {totalItems}
-                </Badge>
-              )}
-            </Button>
-          </SheetTrigger>
-          <SheetContent className="w-full sm:max-w-lg">
-            <SheetHeader>
-              <SheetTitle>Корзина</SheetTitle>
-            </SheetHeader>
-            <div className="flex flex-col gap-4 py-4">
-              {cartItems.length === 0 ? (
-                <div className="flex flex-col items-center justify-center py-12 text-center">
-                  <Icon name="ShoppingCart" size={48} className="text-muted-foreground mb-4" />
-                  <p className="text-muted-foreground">Корзина пуста</p>
-                </div>
-              ) : (
-                <>
-                  <div className="flex-1 space-y-4">
-                    {cartItems.map(item => (
-                      <Card key={item.id}>
-                        <CardContent className="p-4">
-                          <div className="flex gap-4">
-                            <img src={item.image} alt={item.name} className="w-20 h-20 object-cover rounded" />
-                            <div className="flex-1">
-                              <h4 className="font-medium">{item.name}</h4>
-                              <p className="text-sm text-muted-foreground mt-1">
-                                {item.price.toLocaleString('ru-RU')} ₽
-                              </p>
-                              <div className="flex items-center gap-2 mt-2">
-                                <Button
-                                  variant="outline"
-                                  size="icon"
-                                  className="h-8 w-8"
-                                  onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                                >
-                                  <Icon name="Minus" size={16} />
-                                </Button>
-                                <span className="w-8 text-center">{item.quantity}</span>
-                                <Button
-                                  variant="outline"
-                                  size="icon"
-                                  className="h-8 w-8"
-                                  onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                                >
-                                  <Icon name="Plus" size={16} />
-                                </Button>
-                                <Button
-                                  variant="ghost"
-                                  size="icon"
-                                  className="h-8 w-8 ml-auto"
-                                  onClick={() => removeFromCart(item.id)}
-                                >
-                                  <Icon name="Trash2" size={16} />
-                                </Button>
-                              </div>
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    ))}
+              <Button variant="ghost" size="sm" className="relative">
+                <Icon name="ShoppingCart" size={20} />
+                {totalItems > 0 && (
+                  <Badge 
+                    className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs"
+                    variant="default"
+                  >
+                    {totalItems}
+                  </Badge>
+                )}
+              </Button>
+            </SheetTrigger>
+            <SheetContent className="w-full sm:max-w-lg">
+              <SheetHeader>
+                <SheetTitle>Корзина</SheetTitle>
+              </SheetHeader>
+              <div className="mt-8 flex flex-col h-[calc(100vh-8rem)]">
+                {cartItems.length === 0 ? (
+                  <div className="flex-1 flex flex-col items-center justify-center text-center">
+                    <Icon name="ShoppingCart" size={64} className="text-muted-foreground mb-4" />
+                    <p className="text-muted-foreground mb-2">Корзина пуста</p>
+                    <p className="text-sm text-muted-foreground">Добавьте товары из каталога</p>
                   </div>
-                  <Separator />
-                  {!showOrderForm ? (
-                    <div className="space-y-4">
-                      <div className="flex justify-between text-lg font-bold">
-                        <span>Итого:</span>
-                        <span>{totalPrice.toLocaleString('ru-RU')} ₽</span>
-                      </div>
-                      <Button 
-                        className="w-full" 
-                        size="lg"
-                        onClick={() => setShowOrderForm(true)}
-                      >
-                        Оформить заказ
-                      </Button>
-                    </div>
-                  ) : (
-                    <div className="space-y-4">
-                      <div className="flex justify-between text-lg font-bold mb-4">
-                        <span>Итого:</span>
-                        <span>{totalPrice.toLocaleString('ru-RU')} ₽</span>
-                      </div>
-                      
-                      <div className="space-y-4">
-                        <div className="space-y-2">
-                          <Label htmlFor="phone">
-                            Телефон <span className="text-destructive">*</span>
-                          </Label>
-                          <InputMask
-                            mask="+7 (999) 999-99-99"
-                            value={phone}
-                            onChange={(e) => setPhone(e.target.value)}
-                            maskChar="_"
-                          >
-                            {/* @ts-ignore */}
-                            {(inputProps: any) => (
-                              <Input
-                                {...inputProps}
-                                id="phone"
-                                type="tel"
-                                placeholder="+7 (___) ___-__-__"
-                                required
-                                className={phone.length > 0 && !isPhoneValid ? 'border-destructive' : ''}
-                              />
-                            )}
-                          </InputMask>
-                          {phone.length > 0 && !isPhoneValid && (
-                            <p className="text-xs text-destructive">Введите полный номер телефона</p>
-                          )}
-                        </div>
-
-                        <div className="space-y-2">
-                          <Label htmlFor="city">
-                            Город получения <span className="text-destructive">*</span>
-                          </Label>
-                          <Popover open={openCityPopover} onOpenChange={setOpenCityPopover}>
-                            <PopoverTrigger asChild>
-                              <Button
-                                variant="outline"
-                                role="combobox"
-                                aria-expanded={openCityPopover}
-                                className="w-full justify-between font-normal"
-                              >
-                                {city || "Выберите город"}
-                                <Icon name="ChevronsUpDown" size={16} className="ml-2 opacity-50" />
-                              </Button>
-                            </PopoverTrigger>
-                            <PopoverContent className="w-full p-0" align="start">
-                              <Command>
-                                <CommandInput 
-                                  placeholder="Поиск города..." 
-                                  value={city}
-                                  onValueChange={setCity}
-                                />
-                                <CommandList>
-                                  <CommandEmpty>Город не найден</CommandEmpty>
-                                  <CommandGroup>
-                                    {filteredCities.slice(0, 50).map((cityName) => (
-                                      <CommandItem
-                                        key={cityName}
-                                        value={cityName}
-                                        onSelect={(currentValue) => {
-                                          setCity(currentValue);
-                                          setOpenCityPopover(false);
-                                        }}
-                                      >
-                                        <Icon
-                                          name="Check"
-                                          size={16}
-                                          className={city === cityName ? "mr-2 opacity-100" : "mr-2 opacity-0"}
-                                        />
-                                        {cityName}
-                                      </CommandItem>
-                                    ))}
-                                  </CommandGroup>
-                                </CommandList>
-                              </Command>
-                            </PopoverContent>
-                          </Popover>
-                        </div>
-
-                        <div className="space-y-2">
-                          <Label htmlFor="fullName">ФИО (опционально)</Label>
-                          <Input
-                            id="fullName"
-                            type="text"
-                            placeholder="Иванов Иван Иванович"
-                            value={fullName}
-                            onChange={(e) => setFullName(e.target.value)}
-                          />
-                        </div>
-
-                        {dadataToken && (
-                          <div className="space-y-2">
-                            <Label htmlFor="address">
-                              Адрес доставки <span className="text-destructive">*</span>
-                            </Label>
-                            <AddressAutocomplete
-                              value={address}
-                              onChange={setAddress}
-                              token={dadataToken}
+                ) : (
+                  <>
+                    <div className="flex-1 overflow-y-auto space-y-4 mb-4">
+                      {!showOrderForm ? (
+                        <>
+                          {cartItems.map(item => (
+                            <CartItem
+                              key={item.id}
+                              item={item}
+                              updateQuantity={updateQuantity}
+                              removeFromCart={removeFromCart}
                             />
-                          </div>
-                        )}
-                      </div>
-
-                      <div className="flex gap-2">
-                        <Button
-                          variant="outline"
-                          className="flex-1"
-                          onClick={() => setShowOrderForm(false)}
-                          disabled={isSubmitting}
-                        >
-                          Назад
-                        </Button>
-                        <Button
-                          className="flex-1"
-                          onClick={handleSubmitOrder}
-                          disabled={!isFormValid || isSubmitting}
-                        >
-                          {isSubmitting ? 'Отправка...' : 'Отправить заявку'}
-                        </Button>
-                      </div>
+                          ))}
+                        </>
+                      ) : (
+                        <OrderForm
+                          cartItems={cartItems}
+                          totalPrice={totalPrice}
+                          totalItems={totalItems}
+                          onBack={() => setShowOrderForm(false)}
+                          onSuccess={handleOrderSuccess}
+                        />
+                      )}
                     </div>
-                  )}
-                </>
-              )}
-            </div>
-          </SheetContent>
+                    {!showOrderForm && (
+                      <CartSummary
+                        totalPrice={totalPrice}
+                        onCheckout={() => setShowOrderForm(true)}
+                      />
+                    )}
+                  </>
+                )}
+              </div>
+            </SheetContent>
           </Sheet>
         </div>
       </div>
