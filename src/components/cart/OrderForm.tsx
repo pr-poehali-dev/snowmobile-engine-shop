@@ -88,7 +88,7 @@ const OrderForm = ({ cartItems, totalPrice, totalItems, onBack, onSuccess }: Ord
 
   const phoneDigits = phone.replace(/\D/g, '');
   const isPhoneValid = phoneDigits.length === 11;
-  const isFormValid = isPhoneValid && city.trim().length > 0 && address.trim().length > 0;
+  const isFormValid = isPhoneValid && city.trim().length > 0;
 
   const handleSubmitOrder = async () => {
     if (!isFormValid || isSubmitting) return;
@@ -232,18 +232,26 @@ const OrderForm = ({ cartItems, totalPrice, totalItems, onBack, onSuccess }: Ord
           />
         </div>
 
-        {dadataToken && (
-          <div className="space-y-2 animate-in fade-in slide-in-from-bottom-3 duration-300 delay-[400ms]">
-            <Label htmlFor="address">
-              Адрес доставки <span className="text-destructive">*</span>
-            </Label>
+        <div className="space-y-2 animate-in fade-in slide-in-from-bottom-3 duration-300 delay-[400ms]">
+          <Label htmlFor="address">
+            Адрес доставки
+          </Label>
+          {dadataToken ? (
             <AddressAutocomplete
               value={address}
               onChange={setAddress}
               token={dadataToken}
             />
-          </div>
-        )}
+          ) : (
+            <Input
+              id="address"
+              type="text"
+              placeholder="Улица, дом, квартира"
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+            />
+          )}
+        </div>
       </div>
 
       <div className="flex gap-2 animate-in fade-in slide-in-from-bottom-3 duration-300 delay-500">
