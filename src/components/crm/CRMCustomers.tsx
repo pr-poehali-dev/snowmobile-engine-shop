@@ -2,7 +2,10 @@ import { useEffect, useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { useToast } from '@/hooks/use-toast';
 import Icon from '@/components/ui/icon';
 
 interface Customer {
@@ -21,6 +24,15 @@ const CRMCustomers = () => {
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [newCustomer, setNewCustomer] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    city: ''
+  });
+  const { toast } = useToast();
 
   useEffect(() => {
     fetchCustomers();
@@ -28,11 +40,70 @@ const CRMCustomers = () => {
 
   const fetchCustomers = async () => {
     try {
-      setLoading(false);
-      setCustomers([]);
+      const token = localStorage.getItem('crm_token');
+      const response = await fetch('https://functions.poehali.dev/5e4d5d4e-5e4d-5e4d-5e4d-5e4d5e4d5e4d', {
+        headers: {
+          'X-Session-Token': token || ''
+        }
+      });
+      const data = await response.json();
+      
+      if (data.success) {
+        setCustomers(data.customers || []);
+      }
     } catch (error) {
       console.error('Error fetching customers:', error);
+    } finally {
       setLoading(false);
+    }
+  };
+
+  const handleAddCustomer = async () => {
+    if (!newCustomer.name || !newCustomer.phone) {
+      toast({
+        title: 'Ошибка',
+        description: 'Заполните обязательные поля: имя и телефон',
+        variant: 'destructive'
+      });
+      return;
+    }
+
+    setSaving(true);
+    try {
+      const token = localStorage.getItem('crm_token');
+      const response = await fetch('https://functions.poehali.dev/79453fae-130d-46fe-a2fa-47a63f1e38e8', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Session-Token': token || ''
+        },
+        body: JSON.stringify({
+          action: 'add_customer',
+          ...newCustomer
+        })
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        toast({
+          title: 'Клиент добавлен',
+          description: `Клиент ${newCustomer.name} успешно добавлен`
+        });
+        setIsModalOpen(false);
+        setNewCustomer({ name: '', email: '', phone: '', city: '' });
+        fetchCustomers();
+      } else {
+        throw new Error(data.error || 'Ошибка добавления');
+      }
+    } catch (error) {
+      toast({
+        title: 'Ошибка',
+        description: 'Не удалось добавить клиента',
+        variant: 'destructive'
+      });
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -52,7 +123,7 @@ const CRMCustomers = () => {
               <CardTitle>Клиенты</CardTitle>
               <CardDescription>Управление базой клиентов</CardDescription>
             </div>
-            <Button>
+            <Button onClick={() => setIsModalOpen(true)}>
               <Icon name="UserPlus" size={16} className="mr-2" />
               Добавить клиента
             </Button>
@@ -121,6 +192,64 @@ const CRMCustomers = () => {
           )}
         </CardContent>
       </Card>
+
+      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Добавить клиента</DialogTitle>
+            <DialogDescription>
+              Заполните информацию о новом клиенте
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="name">Имя *</Label>
+              <Input
+                id="name"
+                placeholder="Иван Иванов"
+                value={newCustomer.name}
+                onChange={(e) => setNewCustomer({ ...newCustomer, name: e.target.value })}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="phone">Телефон *</Label>
+              <Input
+                id="phone"
+                placeholder="+7 (999) 123-45-67"
+                value={newCustomer.phone}
+                onChange={(e) => setNewCustomer({ ...newCustomer, phone: e.target.value })}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="email">Email</Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="example@mail.ru"
+                value={newCustomer.email}
+                onChange={(e) => setNewCustomer({ ...newCustomer, email: e.target.value })}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="city">Город</Label>
+              <Input
+                id="city"
+                placeholder="Москва"
+                value={newCustomer.city}
+                onChange={(e) => setNewCustomer({ ...newCustomer, city: e.target.value })}
+              />
+            </div>
+            <div className="flex gap-2 justify-end pt-4">
+              <Button variant="outline" onClick={() => setIsModalOpen(false)} disabled={saving}>
+                Отмена
+              </Button>
+              <Button onClick={handleAddCustomer} disabled={saving}>
+                {saving ? 'Сохранение...' : 'Добавить'}
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
