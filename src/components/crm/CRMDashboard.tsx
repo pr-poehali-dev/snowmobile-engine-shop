@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import Icon from '@/components/ui/icon';
 import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
@@ -42,15 +43,17 @@ const CRMDashboard = () => {
   const [topProducts, setTopProducts] = useState<TopProduct[]>([]);
   const [statusBreakdown, setStatusBreakdown] = useState<StatusBreakdown[]>([]);
   const [loading, setLoading] = useState(true);
+  const [period, setPeriod] = useState('all');
 
   useEffect(() => {
     fetchDashboardStats();
-  }, []);
+  }, [period]);
 
   const fetchDashboardStats = async () => {
+    setLoading(true);
     try {
       const token = localStorage.getItem('crm_token');
-      const response = await fetch('https://functions.poehali.dev/97017881-7f77-46c3-a9fc-ba0e40b3be0b', {
+      const response = await fetch(`https://functions.poehali.dev/97017881-7f77-46c3-a9fc-ba0e40b3be0b?period=${period}`, {
         headers: {
           'X-Session-Token': token || ''
         }
@@ -147,8 +150,61 @@ const CRMDashboard = () => {
     );
   }
 
+  const getPeriodLabel = () => {
+    switch (period) {
+      case 'today': return 'сегодня';
+      case 'week': return 'за неделю';
+      case 'month': return 'за месяц';
+      case 'year': return 'за год';
+      default: return 'за все время';
+    }
+  };
+
   return (
     <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
+          <p className="text-muted-foreground">Статистика продаж {getPeriodLabel()}</p>
+        </div>
+        <Select value={period} onValueChange={setPeriod}>
+          <SelectTrigger className="w-[200px]">
+            <SelectValue placeholder="Выберите период" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="today">
+              <div className="flex items-center gap-2">
+                <Icon name="Calendar" size={16} />
+                Сегодня
+              </div>
+            </SelectItem>
+            <SelectItem value="week">
+              <div className="flex items-center gap-2">
+                <Icon name="CalendarDays" size={16} />
+                Неделя
+              </div>
+            </SelectItem>
+            <SelectItem value="month">
+              <div className="flex items-center gap-2">
+                <Icon name="CalendarRange" size={16} />
+                Месяц
+              </div>
+            </SelectItem>
+            <SelectItem value="year">
+              <div className="flex items-center gap-2">
+                <Icon name="CalendarClock" size={16} />
+                Год
+              </div>
+            </SelectItem>
+            <SelectItem value="all">
+              <div className="flex items-center gap-2">
+                <Icon name="Infinity" size={16} />
+                Все время
+              </div>
+            </SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {statCards.map((stat, index) => (
           <Card key={index} className="hover:shadow-lg transition-shadow">
