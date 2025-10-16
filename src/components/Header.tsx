@@ -109,11 +109,11 @@ const Header = ({
                 Telegram
               </a>
               <a 
-                href="tel:+79000000000"
+                href="tel:+79828202197"
                 className="flex items-center gap-2 text-left text-base font-medium text-muted-foreground hover:text-primary transition-colors"
               >
                 <Icon name="Phone" size={18} />
-                +7 (900) 000-00-00
+                +7 (982) 820-21-97
               </a>
             </nav>
           </SheetContent>
@@ -168,12 +168,12 @@ const Header = ({
           </a>
           
           <a 
-            href="tel:+79000000000"
+            href="tel:+79828202197"
             className="hidden md:flex"
           >
             <Button variant="ghost" size="sm" className="gap-2">
               <Icon name="Phone" size={18} />
-              <span className="hidden lg:inline">+7 (900) 000-00-00</span>
+              <span className="hidden lg:inline">+7 (982) 820-21-97</span>
             </Button>
           </a>
 
