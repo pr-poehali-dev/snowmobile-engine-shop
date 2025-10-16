@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import Icon from '@/components/ui/icon';
+import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 interface DashboardStats {
   totalOrders: number;
@@ -9,6 +10,23 @@ interface DashboardStats {
   newCustomers: number;
   pendingOrders: number;
   completedOrders: number;
+}
+
+interface DailyStats {
+  date: string;
+  orders: number;
+  revenue: number;
+}
+
+interface TopProduct {
+  name: string;
+  quantity: number;
+  revenue: number;
+}
+
+interface StatusBreakdown {
+  status: string;
+  count: number;
 }
 
 const CRMDashboard = () => {
@@ -20,6 +38,9 @@ const CRMDashboard = () => {
     pendingOrders: 0,
     completedOrders: 0,
   });
+  const [dailyStats, setDailyStats] = useState<DailyStats[]>([]);
+  const [topProducts, setTopProducts] = useState<TopProduct[]>([]);
+  const [statusBreakdown, setStatusBreakdown] = useState<StatusBreakdown[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -53,6 +74,9 @@ const CRMDashboard = () => {
           pendingOrders: pendingCount,
           completedOrders: completedCount
         });
+        setDailyStats(data.dailyStats || []);
+        setTopProducts(data.topProducts || []);
+        setStatusBreakdown(data.statusBreakdown || []);
       }
     } catch (error) {
       console.error('Error fetching dashboard stats:', error);
@@ -143,17 +167,109 @@ const CRMDashboard = () => {
         ))}
       </div>
 
+      <div className="grid gap-4 md:grid-cols-2">
+        <Card>
+          <CardHeader>
+            <CardTitle>Динамика продаж за 30 дней</CardTitle>
+            <CardDescription>Заказы и выручка по дням</CardDescription>
+          </CardHeader>
+          <CardContent>
+            {dailyStats.length > 0 ? (
+              <ResponsiveContainer width="100%" height={300}>
+                <LineChart data={dailyStats}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis 
+                    dataKey="date" 
+                    tickFormatter={(date) => new Date(date).toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' })}
+                  />
+                  <YAxis yAxisId="left" />
+                  <YAxis yAxisId="right" orientation="right" />
+                  <Tooltip 
+                    labelFormatter={(date) => new Date(date).toLocaleDateString('ru-RU')}
+                    formatter={(value: number, name: string) => [
+                      name === 'revenue' ? `${value.toLocaleString('ru-RU')} ₽` : value,
+                      name === 'revenue' ? 'Выручка' : 'Заказы'
+                    ]}
+                  />
+                  <Legend formatter={(value) => value === 'revenue' ? 'Выручка' : 'Заказы'} />
+                  <Line yAxisId="left" type="monotone" dataKey="orders" stroke="#3b82f6" strokeWidth={2} />
+                  <Line yAxisId="right" type="monotone" dataKey="revenue" stroke="#10b981" strokeWidth={2} />
+                </LineChart>
+              </ResponsiveContainer>
+            ) : (
+              <div className="text-center text-muted-foreground py-12">Нет данных для отображения</div>
+            )}
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Распределение по статусам</CardTitle>
+            <CardDescription>Статусы текущих заказов</CardDescription>
+          </CardHeader>
+          <CardContent>
+            {statusBreakdown.length > 0 ? (
+              <ResponsiveContainer width="100%" height={300}>
+                <PieChart>
+                  <Pie
+                    data={statusBreakdown.map(s => ({
+                      name: s.status === 'new' ? 'Новые' : s.status === 'processing' ? 'В обработке' : s.status === 'completed' ? 'Выполнены' : 'Отменены',
+                      value: s.count
+                    }))}
+                    cx="50%"
+                    cy="50%"
+                    labelLine={false}
+                    label={(entry) => `${entry.name}: ${entry.value}`}
+                    outerRadius={80}
+                    fill="#8884d8"
+                    dataKey="value"
+                  >
+                    {statusBreakdown.map((entry, index) => {
+                      const colors = ['#3b82f6', '#f59e0b', '#10b981', '#ef4444'];
+                      return <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />;
+                    })}
+                  </Pie>
+                  <Tooltip />
+                </PieChart>
+              </ResponsiveContainer>
+            ) : (
+              <div className="text-center text-muted-foreground py-12">Нет данных для отображения</div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+
       <Card>
         <CardHeader>
-          <CardTitle>Последние заказы</CardTitle>
-          <CardDescription>
-            Недавние заказы от ваших клиентов
-          </CardDescription>
+          <CardTitle>Топ-10 товаров</CardTitle>
+          <CardDescription>Самые популярные товары по количеству продаж</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="text-center text-muted-foreground py-8">
-            Список последних заказов загружается...
-          </div>
+          {topProducts.length > 0 ? (
+            <ResponsiveContainer width="100%" height={400}>
+              <BarChart data={topProducts} layout="vertical">
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis type="number" />
+                <YAxis 
+                  dataKey="name" 
+                  type="category" 
+                  width={150}
+                  tickFormatter={(name) => name.length > 20 ? name.substring(0, 20) + '...' : name}
+                />
+                <Tooltip 
+                  formatter={(value: number, name: string) => [
+                    name === 'revenue' ? `${value.toLocaleString('ru-RU')} ₽` : `${value} шт.`,
+                    name === 'revenue' ? 'Выручка' : 'Продано'
+                  ]}
+                />
+                <Legend formatter={(value) => value === 'revenue' ? 'Выручка' : 'Продано'} />
+                <Bar dataKey="quantity" fill="#3b82f6" />
+                <Bar dataKey="revenue" fill="#10b981" />
+              </BarChart>
+            </ResponsiveContainer>
+          ) : (
+            <div className="text-center text-muted-foreground py-12">Нет данных для отображения</div>
+          )}
         </CardContent>
       </Card>
     </div>
