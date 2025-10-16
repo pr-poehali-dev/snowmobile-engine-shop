@@ -11,6 +11,7 @@ import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, Command
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import Icon from '@/components/ui/icon';
 import AddressAutocomplete from '@/components/AddressAutocomplete';
+import InputMask from 'react-input-mask';
 
 interface CartItem {
   id: string;
@@ -103,7 +104,9 @@ const Header = ({
     ? russianCities.filter(c => c.toLowerCase().includes(city.toLowerCase()))
     : russianCities;
 
-  const isFormValid = phone.trim().length > 0 && city.trim().length > 0 && address.trim().length > 0;
+  const phoneDigits = phone.replace(/\D/g, '');
+  const isPhoneValid = phoneDigits.length === 11;
+  const isFormValid = isPhoneValid && city.trim().length > 0 && address.trim().length > 0;
 
   const handleSubmitOrder = async () => {
     if (!isFormValid || isSubmitting) return;
@@ -369,14 +372,27 @@ const Header = ({
                           <Label htmlFor="phone">
                             Телефон <span className="text-destructive">*</span>
                           </Label>
-                          <Input
-                            id="phone"
-                            type="tel"
-                            placeholder="+7 (___) ___-__-__"
+                          <InputMask
+                            mask="+7 (999) 999-99-99"
                             value={phone}
                             onChange={(e) => setPhone(e.target.value)}
-                            required
-                          />
+                            maskChar="_"
+                          >
+                            {/* @ts-ignore */}
+                            {(inputProps: any) => (
+                              <Input
+                                {...inputProps}
+                                id="phone"
+                                type="tel"
+                                placeholder="+7 (___) ___-__-__"
+                                required
+                                className={phone.length > 0 && !isPhoneValid ? 'border-destructive' : ''}
+                              />
+                            )}
+                          </InputMask>
+                          {phone.length > 0 && !isPhoneValid && (
+                            <p className="text-xs text-destructive">Введите полный номер телефона</p>
+                          )}
                         </div>
 
                         <div className="space-y-2">
