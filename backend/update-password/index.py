@@ -1,7 +1,7 @@
 '''
-Business: Обновление пароля администратора
-Args: event с GET методом для обновления пароля admin на Belka1608
-Returns: HTTP response с результатом обновления
+Business: Сброс всех пользователей и создание нового админа
+Args: event с GET методом для сброса всех учетных записей
+Returns: HTTP response с новыми учетными данными
 '''
 
 import json
@@ -32,34 +32,47 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     
     if method == 'GET':
         try:
-            # Generate bcrypt hash for password "Belka1608"
-            password = "Belka1608"
+            # New admin credentials
+            admin_password = "Admin2024!"
+            
+            # Generate bcrypt hash
             salt = bcrypt.gensalt()
-            password_hash = bcrypt.hashpw(password.encode('utf-8'), salt).decode('utf-8')
+            admin_hash = bcrypt.hashpw(admin_password.encode('utf-8'), salt).decode('utf-8')
             
             # Connect to database
             conn = get_db_connection()
             cur = conn.cursor()
             
-            # Update admin password
-            cur.execute(
-                "UPDATE users SET password_hash = %s, updated_at = NOW() WHERE email = %s",
-                (password_hash, 'admin')
-            )
+            # Deactivate all sessions
+            cur.execute("UPDATE sessions SET expires_at = NOW()")
+            sessions_cleared = cur.rowcount
             
-            rows_updated = cur.rowcount
+            # Deactivate all non-admin users
+            cur.execute("UPDATE users SET is_active = false WHERE role != 'admin'")
+            users_deactivated = cur.rowcount
+            
+            # Update admin user credentials
+            cur.execute(
+                "UPDATE users SET email = %s, password_hash = %s, full_name = %s, is_active = true, updated_at = NOW() WHERE role = %s",
+                ('admin', admin_hash, 'Администратор', 'admin')
+            )
+            admin_updated = cur.rowcount
+            
             conn.commit()
             
             # Verify the update
-            cur.execute("SELECT email, role FROM users WHERE email = %s", ('admin',))
-            user = cur.fetchone()
+            cur.execute("SELECT id, email, full_name, role, is_active FROM users WHERE role = 'admin'")
+            admin_user = cur.fetchone()
+            
+            cur.execute("SELECT COUNT(*) FROM users WHERE is_active = true")
+            active_count = cur.fetchone()[0]
             
             cur.close()
             conn.close()
             
-            if user and rows_updated > 0:
+            if admin_user and admin_updated > 0:
                 # Test password verification
-                test_verify = bcrypt.checkpw(password.encode('utf-8'), password_hash.encode('utf-8'))
+                test_verify = bcrypt.checkpw(admin_password.encode('utf-8'), admin_hash.encode('utf-8'))
                 
                 return {
                     'statusCode': 200,
@@ -69,11 +82,24 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                     },
                     'body': json.dumps({
                         'success': True,
-                        'message': 'Password updated successfully',
-                        'email': user[0],
-                        'role': user[1],
-                        'hash_verified': test_verify,
-                        'rows_updated': rows_updated
+                        'message': 'Все пользователи сброшены, новый админ создан',
+                        'admin': {
+                            'id': admin_user[0],
+                            'email': admin_user[1],
+                            'full_name': admin_user[2],
+                            'role': admin_user[3],
+                            'is_active': admin_user[4]
+                        },
+                        'new_credentials': {
+                            'login': 'admin',
+                            'password': admin_password
+                        },
+                        'stats': {
+                            'sessions_cleared': sessions_cleared,
+                            'users_deactivated': users_deactivated,
+                            'active_users': active_count,
+                            'hash_verified': test_verify
+                        }
                     }),
                     'isBase64Encoded': False
                 }
