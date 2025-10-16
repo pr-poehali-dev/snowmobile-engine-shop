@@ -1,0 +1,22 @@
+{
+  "tests": [
+    {
+      "name": "Create new admin user",
+      "method": "POST",
+      "path": "/",
+      "body": {
+        "email": "testadmin",
+        "password": "TestPass123!",
+        "full_name": "Тестовый Админ"
+      },
+      "expectedStatus": 200,
+      "expectedBody": {
+        "success": true,
+        "credentials": {
+          "login": "testadmin"
+        }
+      },
+      "bodyMatcher": "partial"
+    }
+  ]
+}
