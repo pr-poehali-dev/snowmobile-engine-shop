@@ -44,15 +44,19 @@ const CRMCustomers = () => {
   const fetchCustomers = async () => {
     try {
       const token = localStorage.getItem('crm_token');
-      const response = await fetch('https://functions.poehali.dev/5e4d5d4e-5e4d-5e4d-5e4d-5e4d5e4d5e4d', {
+      const response = await fetch('https://functions.poehali.dev/79453fae-130d-46fe-a2fa-47a63f1e38e8', {
         headers: {
           'X-Session-Token': token || ''
         }
       });
       const data = await response.json();
       
+      console.log('Customers response:', data);
+      
       if (data.success) {
         setCustomers(data.customers || []);
+      } else {
+        console.error('Customers fetch failed:', data.error);
       }
     } catch (error) {
       console.error('Error fetching customers:', error);
