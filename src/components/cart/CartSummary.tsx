@@ -8,14 +8,14 @@ interface CartSummaryProps {
 
 const CartSummary = ({ totalPrice, onCheckout }: CartSummaryProps) => {
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 animate-in fade-in slide-in-from-bottom-5 duration-300">
       <Separator />
       <div className="flex justify-between text-lg font-bold">
         <span>Итого:</span>
-        <span>{totalPrice.toLocaleString('ru-RU')} ₽</span>
+        <span className="transition-all">{totalPrice.toLocaleString('ru-RU')} ₽</span>
       </div>
       <Button 
-        className="w-full" 
+        className="w-full transition-all hover:scale-[1.02] active:scale-95" 
         size="lg"
         onClick={onCheckout}
       >

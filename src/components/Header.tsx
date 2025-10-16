@@ -197,10 +197,10 @@ const Header = ({
               </SheetHeader>
               <div className="mt-8 flex flex-col h-[calc(100vh-8rem)]">
                 {cartItems.length === 0 ? (
-                  <div className="flex-1 flex flex-col items-center justify-center text-center">
-                    <Icon name="ShoppingCart" size={64} className="text-muted-foreground mb-4" />
-                    <p className="text-muted-foreground mb-2">Корзина пуста</p>
-                    <p className="text-sm text-muted-foreground">Добавьте товары из каталога</p>
+                  <div className="flex-1 flex flex-col items-center justify-center text-center animate-in fade-in zoom-in-95 duration-500">
+                    <Icon name="ShoppingCart" size={64} className="text-muted-foreground mb-4 animate-in fade-in slide-in-from-bottom-5 duration-700" />
+                    <p className="text-muted-foreground mb-2 animate-in fade-in slide-in-from-bottom-3 duration-500 delay-200">Корзина пуста</p>
+                    <p className="text-sm text-muted-foreground animate-in fade-in slide-in-from-bottom-3 duration-500 delay-300">Добавьте товары из каталога</p>
                   </div>
                 ) : (
                   <>

@@ -18,13 +18,13 @@ interface CartItemProps {
 
 const CartItem = ({ item, updateQuantity, removeFromCart }: CartItemProps) => {
   return (
-    <Card>
+    <Card className="animate-in fade-in slide-in-from-right-5 duration-300">
       <CardContent className="p-3">
         <div className="flex gap-3">
           <img 
             src={item.image} 
             alt={item.name}
-            className="w-16 h-16 object-cover rounded"
+            className="w-16 h-16 object-cover rounded transition-transform hover:scale-105"
           />
           <div className="flex-1 min-w-0">
             <h4 className="font-medium text-sm line-clamp-2 mb-2">{item.name}</h4>
@@ -33,16 +33,16 @@ const CartItem = ({ item, updateQuantity, removeFromCart }: CartItemProps) => {
                 <Button
                   variant="outline"
                   size="icon"
-                  className="h-7 w-7"
+                  className="h-7 w-7 transition-all hover:scale-110 active:scale-95"
                   onClick={() => updateQuantity(item.id, item.quantity - 1)}
                 >
                   <Icon name="Minus" size={14} />
                 </Button>
-                <span className="text-sm font-medium w-6 text-center">{item.quantity}</span>
+                <span className="text-sm font-medium w-6 text-center transition-all">{item.quantity}</span>
                 <Button
                   variant="outline"
                   size="icon"
-                  className="h-7 w-7"
+                  className="h-7 w-7 transition-all hover:scale-110 active:scale-95"
                   onClick={() => updateQuantity(item.id, item.quantity + 1)}
                 >
                   <Icon name="Plus" size={14} />
@@ -55,7 +55,7 @@ const CartItem = ({ item, updateQuantity, removeFromCart }: CartItemProps) => {
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-7 w-7"
+                  className="h-7 w-7 transition-all hover:scale-110 hover:bg-destructive/10 active:scale-95"
                   onClick={() => removeFromCart(item.id)}
                 >
                   <Icon name="Trash2" size={14} className="text-destructive" />

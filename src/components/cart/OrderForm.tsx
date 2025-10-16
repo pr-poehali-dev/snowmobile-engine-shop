@@ -138,14 +138,14 @@ const OrderForm = ({ cartItems, totalPrice, totalItems, onBack, onSuccess }: Ord
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 animate-in fade-in slide-in-from-left-5 duration-500">
       <div className="flex justify-between text-lg font-bold mb-4">
         <span>Итого:</span>
         <span>{totalPrice.toLocaleString('ru-RU')} ₽</span>
       </div>
       
       <div className="space-y-4">
-        <div className="space-y-2">
+        <div className="space-y-2 animate-in fade-in slide-in-from-bottom-3 duration-300 delay-100">
           <Label htmlFor="phone">
             Телефон <span className="text-destructive">*</span>
           </Label>
@@ -167,11 +167,11 @@ const OrderForm = ({ cartItems, totalPrice, totalItems, onBack, onSuccess }: Ord
             )}
           </InputMask>
           {phone.length > 0 && !isPhoneValid && (
-            <p className="text-xs text-destructive">Введите полный номер телефона</p>
+            <p className="text-xs text-destructive animate-in fade-in slide-in-from-top-1 duration-200">Введите полный номер телефона</p>
           )}
         </div>
 
-        <div className="space-y-2">
+        <div className="space-y-2 animate-in fade-in slide-in-from-bottom-3 duration-300 delay-200">
           <Label htmlFor="city">
             Город получения <span className="text-destructive">*</span>
           </Label>
@@ -221,7 +221,7 @@ const OrderForm = ({ cartItems, totalPrice, totalItems, onBack, onSuccess }: Ord
           </Popover>
         </div>
 
-        <div className="space-y-2">
+        <div className="space-y-2 animate-in fade-in slide-in-from-bottom-3 duration-300 delay-300">
           <Label htmlFor="fullName">ФИО (опционально)</Label>
           <Input
             id="fullName"
@@ -233,7 +233,7 @@ const OrderForm = ({ cartItems, totalPrice, totalItems, onBack, onSuccess }: Ord
         </div>
 
         {dadataToken && (
-          <div className="space-y-2">
+          <div className="space-y-2 animate-in fade-in slide-in-from-bottom-3 duration-300 delay-[400ms]">
             <Label htmlFor="address">
               Адрес доставки <span className="text-destructive">*</span>
             </Label>
@@ -246,7 +246,7 @@ const OrderForm = ({ cartItems, totalPrice, totalItems, onBack, onSuccess }: Ord
         )}
       </div>
 
-      <div className="flex gap-2">
+      <div className="flex gap-2 animate-in fade-in slide-in-from-bottom-3 duration-300 delay-500">
         <Button
           variant="outline"
           className="flex-1"
