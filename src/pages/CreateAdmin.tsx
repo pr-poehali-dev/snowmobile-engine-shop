@@ -1,17 +1,41 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import Icon from '@/components/ui/icon';
 
+const SECRET_KEY = 'create-admin-2024';
+
 const CreateAdmin = () => {
+  const [accessKey, setAccessKey] = useState('');
+  const [isAuthorized, setIsAuthorized] = useState(false);
   const [email, setEmail] = useState('admin@crm.local');
   const [password, setPassword] = useState('Admin2024!');
   const [fullName, setFullName] = useState('Администратор CRM');
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<any>(null);
   const [error, setError] = useState('');
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const savedAuth = sessionStorage.getItem('admin_creator_auth');
+    if (savedAuth === SECRET_KEY) {
+      setIsAuthorized(true);
+    }
+  }, []);
+
+  const handleAccessSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (accessKey === SECRET_KEY) {
+      setIsAuthorized(true);
+      sessionStorage.setItem('admin_creator_auth', SECRET_KEY);
+      setError('');
+    } else {
+      setError('Неверный ключ доступа');
+    }
+  };
 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -41,6 +65,73 @@ const CreateAdmin = () => {
       setLoading(false);
     }
   };
+
+  if (!isAuthorized) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-muted/20 p-4">
+        <Card className="w-full max-w-md">
+          <CardHeader className="space-y-1">
+            <div className="flex items-center justify-center mb-4">
+              <div className="h-12 w-12 rounded-full bg-destructive/10 flex items-center justify-center">
+                <Icon name="ShieldAlert" size={24} className="text-destructive" />
+              </div>
+            </div>
+            <CardTitle className="text-2xl text-center">Доступ ограничен</CardTitle>
+            <CardDescription className="text-center">
+              Введите секретный ключ для создания администратора
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleAccessSubmit} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="accessKey">Секретный ключ</Label>
+                <Input
+                  id="accessKey"
+                  type="password"
+                  placeholder="Введите ключ доступа"
+                  value={accessKey}
+                  onChange={(e) => setAccessKey(e.target.value)}
+                  required
+                />
+              </div>
+              
+              {error && (
+                <div className="flex items-center gap-2 text-sm text-destructive bg-destructive/10 p-3 rounded-md">
+                  <Icon name="AlertCircle" size={16} />
+                  <span>{error}</span>
+                </div>
+              )}
+
+              <div className="bg-muted/50 p-3 rounded-md text-sm text-muted-foreground">
+                <div className="flex items-start gap-2">
+                  <Icon name="Info" size={14} className="mt-0.5" />
+                  <div>
+                    <strong>Ключ доступа:</strong> create-admin-2024<br/>
+                    <span className="text-xs">Эта страница только для первичной настройки</span>
+                  </div>
+                </div>
+              </div>
+              
+              <Button type="submit" className="w-full">
+                <Icon name="Unlock" size={16} className="mr-2" />
+                Получить доступ
+              </Button>
+
+              <Button 
+                type="button" 
+                variant="outline" 
+                className="w-full"
+                onClick={() => navigate('/crm-login')}
+              >
+                <Icon name="ArrowLeft" size={16} className="mr-2" />
+                Вернуться к входу
+              </Button>
+            </form>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-muted/20 p-4">
@@ -133,6 +224,19 @@ const CreateAdmin = () => {
                   Создать
                 </>
               )}
+            </Button>
+
+            <Button 
+              type="button" 
+              variant="outline" 
+              className="w-full"
+              onClick={() => {
+                sessionStorage.removeItem('admin_creator_auth');
+                setIsAuthorized(false);
+              }}
+            >
+              <Icon name="Lock" size={16} className="mr-2" />
+              Заблокировать доступ
             </Button>
           </form>
         </CardContent>
