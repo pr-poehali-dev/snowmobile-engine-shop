@@ -24,7 +24,7 @@ const CRMLogin = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ action: 'login', email, password }),
+        body: JSON.stringify({ action: 'login', email: email.trim(), password: password.trim() }),
       });
 
       const data = await response.json();
