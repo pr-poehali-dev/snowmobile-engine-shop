@@ -29,8 +29,8 @@ const CRMLogin = () => {
 
       const data = await response.json();
 
-      if (data.success && data.session_token) {
-        localStorage.setItem('crm_token', data.session_token);
+      if (data.success && data.sessionToken) {
+        localStorage.setItem('crm_token', data.sessionToken);
         localStorage.setItem('crm_user', JSON.stringify({
           username: data.user.email,
           role: data.user.role,
