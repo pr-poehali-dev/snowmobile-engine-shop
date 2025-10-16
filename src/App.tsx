@@ -11,6 +11,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import AdminUsers from "./pages/AdminUsers";
 import CRM from "./pages/CRM";
 import CRMLogin from "./pages/CRMLogin";
+import CreateAdmin from "./pages/CreateAdmin";
 import FAQ from "./pages/FAQ";
 import Blog from "./pages/Blog";
 import BlogArticle from "./pages/BlogArticle";
@@ -57,6 +58,7 @@ const App = () => (
           <Route path="/admin/users" element={<AdminUsers />} />
           <Route path="/crm-login" element={<CRMLogin />} />
           <Route path="/crm" element={<CRM />} />
+          <Route path="/create-admin" element={<CreateAdmin />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
